@@ -1,13 +1,12 @@
 const socket = io();
 
 let username;
-
 Swal.fire({
   title: "Identifícate",
   input: "text",
-  text: "Ingresa tu nombre de usuario",
+  text: "Ingresa tu email",
   inputValidator: (value) => {
-    return !value && "Es obligatorio introducir un nombre de usuario";
+    return !value && "Es obligatorio introducir un email";
   },
   allowOutsideClick: false,
 }).then((result) => {
@@ -16,29 +15,25 @@ Swal.fire({
   socket.emit("new-user", username);
 });
 
-const chatInput = document.getElementById("chat-input");
+const chatInput = document.getElementById("input-chat");
 chatInput.addEventListener("keyup", (ev) => {
   if (ev.key === "Enter") {
-    const inputMessage = chatInput.value;
+    const message = chatInput.value;
 
-    if (inputMessage.trim().length > 0) {
-      socket.emit("chat-message", { username, message: inputMessage });
-
+    if (message.trim().length > 0) {
+      socket.emit("new-message", { username, message });
       chatInput.value = "";
     }
   }
 });
 
-const messagesPanel = document.getElementById("messages-panel");
+const panel = document.getElementById("panel");
 socket.on("messages", (data) => {
-  console.log(data);
   let messages = "";
-
   data.forEach((m) => {
     messages += `<b>${m.username}:</b> ${m.message}</br>`;
   });
-
-  messagesPanel.innerHTML = messages;
+  panel.innerHTML = messages;
 });
 
 socket.on("new-user", (username) => {
