@@ -9,9 +9,6 @@ import __dirname from "./utils.js";
 import { engine } from "express-handlebars";
 import { Server } from "socket.io";
 import ChatManager from "./dao/db-managers/messages.dao.js";
-//import ProductManager from "./dao/files-manager/productManager.js";
-
-
 
 const app = express();
 
@@ -22,20 +19,19 @@ app.engine("handlebars", engine());
 app.set("view engine", "handlebars");
 app.set("views", __dirname + "/views");
 
-
-mongoose.connect('mongodb+srv://cobosleandra2:171294@cluster0.ydfb7m6.mongodb.net/?retryWrites=true&w=majority').then(
- (conn)=> {
-    console.log("Connected to DB!")
-  }
-). catch(()=>{
-console.log('Error', Error)
-})
-let manager= new ChatManager()
-;
-
+mongoose
+  .connect(
+    "mongodb+srv://cobosleandra2:171294@cluster0.ydfb7m6.mongodb.net/?retryWrites=true&w=majority"
+  )
+  .then((conn) => {
+    console.log("Connected to DB!");
+  })
+  .catch(() => {
+    console.log("Error");
+  });
+let manager = new ChatManager();
 const httpServer = app.listen(8080, () => {
   console.log("Server listening on port 8080");
-  
 });
 
 const io = new Server(httpServer);

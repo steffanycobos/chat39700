@@ -1,18 +1,12 @@
-Lista de productos:
+<h1>Productos</h1>
 <div class="people-table">
 
   {{#each products}}
-    <tr>
- 
-      <td style="text-align: center;">{{this.title}}</td>
-      <td style="text-align: center;">{{this.description}}</td>
-      <td style="text-align: center;">{{this.code}}</td>
-      <td style="text-align: center;">{{this.price}}</td>
- 
-      <td style="text-align: center;">{{this.stock}}</td>
-    
-      
-    </tr>
+
+    <li>
+      {{this}}
+    </li>
+
   {{/each}}
 
 </div>

@@ -3,19 +3,16 @@ import ProductManager from "../dao/db-managers/products.dao.manager.js";
 import MessageManager from "../dao/db-managers/messages.dao.js";
 
 const viewsRouter = Router();
-const productManager= new ProductManager()
-const messageManager= new MessageManager()
+const productManager = new ProductManager();
+const messageManager = new MessageManager();
 viewsRouter.get("/", async (req, res) => {
-  const  result  = await productManager.getProducts();
-    res.render("home", { products: result });
-  
+  const products = await productManager.getProducts();
+  res.render("home", { products });
 });
 
 viewsRouter.get("/real-time-products", async (req, res) => {
-  const result = await productManager.getProducts();
-
-    res.render("real_time_products", { products: result });
-  
+  const products = await productManager.getProducts();
+  res.render("real_time_products", { products });
 });
 
 viewsRouter.get("/chat", async (req, res) => {
@@ -28,4 +25,3 @@ viewsRouter.get("/chat", async (req, res) => {
 });
 
 export default viewsRouter;
-
