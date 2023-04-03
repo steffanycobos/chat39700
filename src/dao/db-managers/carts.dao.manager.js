@@ -1,9 +1,12 @@
 
 import cartsModel from "../models/carts.models.js";
+import ProductManager from "./products.dao.manager.js";
 
+
+let manager= new ProductManager()
 class CartManager {
   constructor() {}
-
+  
   getCart = async () => {
     let carts = await cartsModel.find().lean();
     let array = Object.values(carts);
@@ -22,7 +25,7 @@ class CartManager {
   }
 
   addProductToCart = async (cartID, product) => {
-    const cart = await cartsModel.find({ _id: cartID });
+    let cart = await cartsModel.find({ _id: cartID });
     console.log(cart, "<= Cart", typeof cart);
     console.log(cart[0], "<=cart[0]");
 
@@ -34,10 +37,31 @@ class CartManager {
     } else {
       let newProducts = { id: product[0].id, quantity: 1 };
       let newCart = cart[0].products.concat(newProducts);
+    cart=(cart.concat(newCart))
+      return console.log(cart)
 
-      return newCart;
     }
   };
+  async deleteProduct(cartID, productID){
+    const cart = await cartsModel.find({ _id: cartID });
+    console.log(cart)
+    let productInCart= await manager.deleteProduct(productID)
+    console.log(productID)
+    return productInCart
+  }
+  async deleteProductsInCart(cid){
+    const cart = await cartsModel.find({ _id: cid });
+   let productInCart= cart[0].products
+
+
+ console.log(productInCart)
+ 
+return productInCart
+
+
+
+  }
 }
+
 
 export default CartManager;

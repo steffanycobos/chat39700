@@ -39,4 +39,17 @@ cartRouter.post("/:cid/product/:pid", async (req, res) => {
   res.send({status:'ok',payload:cart});
 });
 
+cartRouter.delete('/:cid/products/:pid ', async(req,res)=>{
+  let cid =(req.params.cid);
+  let pid =(req.params.pid);
+  let products= await manager.deleteProduct(cid,pid)
+  res.send({status:'ok',payload:products})
+})
+
+cartRouter.delete('/:cid', async(req,res)=>{
+  let cid =(req.params.cid);
+const cart= await manager.deleteProductsInCart(cid)
+res.send({status:'ok',payload: cart})
+})
+
 export default cartRouter;

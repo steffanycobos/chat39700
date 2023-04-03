@@ -36,6 +36,26 @@ class ProductManager {
     const productDelete= await productsModel.deleteOne({ _id: id })
     return productDelete;
   }
+
+  async ordenPrice(num){
+    const products= await productsModel.aggregate([
+     { $sort:{price:num}}
+    ])
+    return products
+  }
+
+  async getProductsByQuery(campo,valor){
+
+    const query={}
+    query[campo]=valor
+    const products= await productsModel.aggregate([
+      {$match:{query}}
+    ])
+   console.log(products, typeof products, 'Aqui')
+  
+    return products
+  }
+
 }
 
 export default ProductManager;
