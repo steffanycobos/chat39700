@@ -1,5 +1,5 @@
 import express from "express";
-import mongoose from "mongoose";
+import mongoose, { Error } from "mongoose";
 import { urlencoded } from "express";
 import handlebars from "express-handlebars";
 import productsRouter from "./routes/products.router.js";
@@ -12,12 +12,22 @@ import ChatManager from "./dao/db-managers/messages.dao.js";
 
 const app = express();
 
+
 app.use(urlencoded({ extended: true }));
 app.engine("handlebars", handlebars.engine());
 app.use(express.static(__dirname + "/../public"));
 app.engine("handlebars", engine());
 app.set("view engine", "handlebars");
 app.set("views", __dirname + "/views");
+
+app.use("/api/products", productsRouter);
+app.use("/api/carts", cartRouter);
+app.use("/", viewsRouter);
+
+let manager = new ChatManager();
+const httpServer = app.listen(8080, () => {
+  console.log("Server listening on port 8080");
+});
 
 mongoose
   .connect(
@@ -29,10 +39,6 @@ mongoose
   .catch(() => {
     console.log("Error");
   });
-let manager = new ChatManager();
-const httpServer = app.listen(8080, () => {
-  console.log("Server listening on port 8080");
-});
 
 const io = new Server(httpServer);
 
@@ -53,6 +59,3 @@ app.use((req, res, next) => {
   req.io = io;
   next();
 });
-app.use("/api/products", productsRouter);
-app.use("/api/carts", cartRouter);
-app.use("/", viewsRouter);

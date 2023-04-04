@@ -3,10 +3,10 @@ import productsModel from "../models/products.models.js";
 class ProductManager {
   constructor() {}
 
- async getProducts(){
+  async getProducts() {
     const products = await productsModel.find();
     return products;
-  };
+  }
 
   async addProducts(title, description, price, thumbnail, code, stock) {
     let newProduct = await productsModel.create({
@@ -28,34 +28,45 @@ class ProductManager {
     const filter = { _id: id };
     const update = { title, description, price, thumbnail, code, stock };
     let product = await productsModel.findOneAndUpdate(filter, update);
+    
 
     return product;
   }
 
-  async deleteProduct(id){
-    const productDelete= await productsModel.deleteOne({ _id: id })
+  async deleteProduct(id) {
+    const productDelete = await productsModel.deleteOne({ _id: id });
     return productDelete;
   }
 
-  async ordenPrice(num){
-    const products= await productsModel.aggregate([
-     { $sort:{price:num}}
-    ])
-    return products
+  async ordenPrice(num) {
+    const products = await productsModel.aggregate([{ $sort: { price: num } }]);
+    return products;
   }
 
-  async getProductsByQuery(campo,valor){
+  async getProductsByQueryTitle(dato) {
+    const products = await productsModel.aggregate([
+      { $match: { title: dato } },
+    ]);
+    console.log(dato, "manager");
 
-    const query={}
-    query[campo]=valor
-    const products= await productsModel.aggregate([
-      {$match:{query}}
-    ])
-   console.log(products, typeof products, 'Aqui')
+    return products;
+  }
   
-    return products
+  async getProductsByQueryPrice(dato) {
+    const products = await productsModel.aggregate([
+      { $match: { price: dato } },
+    ]);
+    return products;
   }
+  
+  async getProductsByQueryStock(dato) {
+    const products = await productsModel.aggregate([
+      { $match: { stock: dato } },
+    ]);
 
+    return products;
+  }
 }
+
 
 export default ProductManager;

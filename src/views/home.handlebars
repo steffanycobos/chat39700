@@ -1,13 +1,21 @@
-<h1>Productos</h1>
-<div class="people-table">
+<div>
+  <h1>Productos por Página:</h1>
+  <ul>
+    {{#each products.docs}}
+      <li>{{title}} <br>
+        Precio:{{price}} <br>
+       Descripcion: {{description}}</li>
+    {{/each}}
+  </ul>
+  <div>
+    {{#if products.hasPrevPage}}
+      <a href="/api/products/page?page={{products.prevPage}}">Anterior</a>
+    {{/if}}
 
-  {{#each products}}
+    <span>Página {{products.page}} de {{products.totalPages}}</span>
 
-    <li>
-      {{this}}
-    </li>
-
-  {{/each}}
-
+    {{#if products.hasNextPage}}
+      <a href="/api/products/page?page={{products.nextPage}}">Siguiente</a>
+    {{/if}}
+  </div>
 </div>
-<script src="/js/index.js"></script>
