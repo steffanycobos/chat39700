@@ -1,6 +1,7 @@
 import cartsModel from "../models/carts.models.js";
 import ProductManager from "./products.dao.manager.js";
 import mongoose from "mongoose";
+import productsModel from "../models/products.models.js";
 
 let manager = new ProductManager();
 class CartManager {
@@ -25,7 +26,9 @@ class CartManager {
 
   async addProductToCart(cartID, productID) {
     let cart = await cartsModel.findById({ _id: cartID })
-    const productExiste = cart.products.find((p) => p.id === productID);
+    let productDB= await productsModel.findById(productID)
+
+    const productExiste = cart.products.find((p) => p.product.code === productDB.code);
     if(productExiste){ productExiste.quantity++; 
       cart.save()
       console.log(cart)
@@ -62,7 +65,7 @@ class CartManager {
     let productInCart = cart[0].products.find((x) => x.id === pid);
     console.log(cart[0], productInCart);
     productInCart.quantity = quantity;
-    return cart;
+    return cart
   }
 }
 
