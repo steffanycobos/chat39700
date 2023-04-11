@@ -2,11 +2,15 @@ import { Router } from "express";
 import ProductManager from "../dao/db-managers/products.dao.manager.js";
 import CartManager from "../dao/db-managers/carts.dao.manager.js";
 import MessageManager from "../dao/db-managers/messages.dao.js";
+import UserManager from "../dao/db-managers/users.dao.manager.js";
 
 const viewsRouter = Router();
 const productManager = new ProductManager();
 const cartManager= new CartManager()
 const messageManager = new MessageManager();
+const userManager= new UserManager()
+
+
 viewsRouter.get("/", async (req, res) => {
   const products = await productManager.getProducts();
   res.render("home",{products});
@@ -41,4 +45,18 @@ const cart= await cartManager.checkCart(cid)
 res.render("carts", { cart});
 })
 
+viewsRouter.get("/login",(req,res)=>{
+  res.render("login");
+});
+
+viewsRouter.get("/signup",(req,res)=>{
+  res.render("register");
+ 
+});
+
+viewsRouter.get("/profile", async (req,res) =>{;
+  const userData= await userManager.allUsers()
+  let lastUser= (userData.pop()).email
+  res.render("profile", {lastUser});
+})
 export default viewsRouter;

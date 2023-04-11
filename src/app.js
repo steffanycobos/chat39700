@@ -8,7 +8,11 @@ import viewsRouter from "./routes/views.router.js";
 import __dirname from "./utils.js";
 import { engine } from "express-handlebars";
 import { Server } from "socket.io";
-import ChatManager from "./dao/db-managers/messages.dao.js";
+import ChatManager from "./dao/db-managers/messages.dao.js"
+import usersRouter from "./routes/users.router.js";
+import session from "express-session";
+import MongoStore from "connect-mongo";
+
 
 const app = express();
 
@@ -23,6 +27,7 @@ app.set("views", __dirname + "/views");
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartRouter);
 app.use("/", viewsRouter);
+
 
 let manager = new ChatManager();
 const httpServer = app.listen(8080, () => {
@@ -40,6 +45,19 @@ mongoose
     console.log("Error");
   });
 
+
+  app.use(session({
+    store:MongoStore.create({
+      mongoUrl:"mongodb+srv://cobosleandra2:171294@cluster0.ydfb7m6.mongodb.net/?retryWrites=true&w=majority",
+     ttl:10000
+    }),
+    secret:"claveSecreta",
+    resave:true,
+    saveUninitialized:true
+  }))
+
+  app.use('/', usersRouter)
+  
 const io = new Server(httpServer);
 
 io.on("connection", (socket) => {
