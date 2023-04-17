@@ -8,6 +8,7 @@ usersRouter.use(json());
 
 usersRouter.post("/signup", async (req, res) => {
   const { email, password } = req.body;
+
   console.log(email, password);
   let user = await manager.getUser(email, password);
   req.session.user = user.email;
@@ -39,12 +40,12 @@ usersRouter.post("/login", async (req, res) => {
       req.session.rol = "admin";
       req.session.isAdmin = true;
       console.log(req.session);
-      return res.send({ status: "ok", payload: req.session });
+      return res.redirect("/api/products")
     } else {
       req.session.user = email.Email;
       req.session.isAdmin = false;
       req.session.rol = "user";
-      return res.send({ status: "ok", payload: req.session });
+      return  res.redirect("/api/products");
     }
   }
 });
