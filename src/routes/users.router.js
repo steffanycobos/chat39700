@@ -8,10 +8,12 @@ usersRouter.use(json());
 
 usersRouter.post("/signup", async (req, res) => {
   const { email, password } = req.body;
+  
 
   console.log(email, password);
   let user = await manager.getUser(email, password);
   req.session.user = user.email;
+  req.session.rol = "user"
   req.session.isAdmin = false;
   if (email === "adminCoder@coder.com" && password === "adminCod3r123") {
     req.session.isAdmin = true;
