@@ -7,7 +7,9 @@ class UserManager {
   async getUser(email, password) {
     const user = await UserModel.findOne({ email: email });
     if (!user) {
-      const newUser = await UserModel.create({ email, password: createHash(password) });
+      const newUser = await UserModel.create({ email:email, 
+        password: createHash(password)});
+
       return newUser;
     } else {
       return `Usuario registrado`;

@@ -12,6 +12,8 @@ import ChatManager from "./dao/db-managers/messages.dao.js"
 import usersRouter from "./routes/users.router.js";
 import session from "express-session";
 import MongoStore from "connect-mongo";
+import passport from "passport";
+import { initializedPassport } from "./config/passport.config.js";
 
 
 const app = express();
@@ -26,7 +28,8 @@ app.set("views", __dirname + "/views");
 
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartRouter);
-app.use("/", viewsRouter);
+
+
 
 
 let manager = new ChatManager();
@@ -55,8 +58,10 @@ mongoose
     resave:true,
     saveUninitialized:true
   }))
+  initializedPassport();
+  app.use(passport.initialize());
+  app.use(passport.session());
 
-  app.use('/', usersRouter)
   
 const io = new Server(httpServer);
 
@@ -77,3 +82,5 @@ app.use((req, res, next) => {
   req.io = io;
   next();
 });
+app.use("/", viewsRouter);
+app.use('/api/sessions', usersRouter)
