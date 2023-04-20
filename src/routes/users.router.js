@@ -53,10 +53,17 @@ usersRouter.post("/login", async (req, res) => {
 usersRouter.get("/login-failes", (req, res) => {
   res.send("No fue posible loguearse");
 });
-usersRouter.post("/logout", (req, res) => {
-  req.session.destroy((error) => {
-    if (error) return res.send("La sesion no se pudo cerrar");
-    res.redirect("/");
+
+usersRouter.get("/logout", (req, res) => {
+  req.logOut((error) => {
+    if (error) {
+      return res.send("No fue posible cerrar sesión.");
+    } else {
+      req.session.destroy((err) => {
+        if (err) return res.send("No fue posible cerrar sesión.");
+        res.redirect("/");
+      });
+    }
   });
 });
 
