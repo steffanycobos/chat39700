@@ -10,11 +10,13 @@ const cartManager= new CartManager()
 const messageManager = new MessageManager();
 const userManager= new UserManager()
 
-
-viewsRouter.get("/", async (req, res) => {
+viewsRouter.get('/', async (req,res)=>{
+  res.render('login')
+})
+/*viewsRouter.get("/", async (req, res) => {
   const products = await productManager.getProducts();
   res.render("home",{products});
-});
+});*/
 
 viewsRouter.get("/real-time-products", async (req, res) => {
   const products = await productManager.getProducts();
@@ -37,6 +39,14 @@ viewsRouter.get('/products/:pid', async (req,res)=>{  try {
   res.send(err);
 }
 
+})
+viewsRouter.get('/products', async (req,res)=>{ 
+   try {
+    const products =await  productManager.getProducts();
+    res.render("products", { products });
+} catch (err) {
+  res.send(err);
+}
 })
 
 viewsRouter.get('/carts/:cid', async (req,res)=>{

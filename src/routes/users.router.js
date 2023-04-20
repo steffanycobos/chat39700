@@ -17,20 +17,6 @@ usersRouter.post(
     res.redirect("/profile");
   }
 );
-/*const { email, password } = req.body;
-  console.log(email, password);
-  let user = await manager.getUser(email, password);
-  req.session.user = user.email;
-  req.session.rol = "user";
-  req.session.isAdmin = false;
-  if (email === "adminCoder@coder.com" && password === "adminCod3r123") {
-    req.session.isAdmin = true;
-    req.session.rol = "admin";
-    console.log(req.session);
-  }
-  console.log(req.session);
-  return res.redirect("/profile");
-});*/
 
 usersRouter.get("/failure-signup", (req, res) => {
   res.send("No fue posible registrar el usuario");
@@ -47,7 +33,7 @@ usersRouter.post("/login", async (req, res) => {
         req.session.username = email;
         req.session.rol = "admin";
         console.log(req.session.rol);
-        return res.redirect("/api/products");
+        return res.redirect("/products");
       } else {
         res.send("Datos inválidos");
       }
@@ -56,12 +42,12 @@ usersRouter.post("/login", async (req, res) => {
         req.session.user = user._id;
         req.session.username = email;
         req.session.rol = "user";
-        return res.redirect("/api/products");
+        return res.redirect("/products");
       } else {
         res.send("Datos inválidos.");
       }
     }
-    return res.redirect("/api/products");
+    return res.redirect("/products");
   }
 });
 usersRouter.get("/login-failes", (req, res) => {

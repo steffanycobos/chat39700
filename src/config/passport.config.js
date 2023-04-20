@@ -4,24 +4,31 @@ import UserModel from "../dao/models/users.model.js";
 import { createHash } from "../utils.js";
 import GithubStrategy from "passport-github2";
 
-const initializedPassport = () => {
+export const initializedPassport = () => {
   passport.use(
     "signupStrategy",
     new LocalStrategy(
       {
         usernameField: "email",
-        passreqToCallback: true,
+        passReqToCallback: true,
       },
-      async (username, password, done) => {
+      async (req, username, password, done) => {
         try {
           const user = await UserModel.findOne({ email: username });
           if (user) {
             return done(null, false);
           }
-
+          let rol = "user";
+          if (
+            username === "adminCoder@coder.com" &&
+            password === "adminCod3r123"
+          ) {
+            rol = "admin";
+          }
           const newUser = {
             email: username,
             password: createHash(password),
+            rol,
           };
           const userCreated = await UserModel.create(newUser);
           return done(null, userCreated);
@@ -31,7 +38,6 @@ const initializedPassport = () => {
       }
     )
   );
-
   /// LOGIN CON GITHUB
   passport.use(
     "githubSignup",
@@ -70,4 +76,3 @@ const initializedPassport = () => {
   });
 };
 
-export { initializedPassport };
