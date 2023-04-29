@@ -14,6 +14,7 @@ export const initializedPassport = () => {
       },
       async (req, username, password, done) => {
         try {
+          const {first_name, last_name,age}= req.body
           const user = await UserModel.findOne({ email: username });
           if (user) {
             return done(null, false);
@@ -25,12 +26,15 @@ export const initializedPassport = () => {
           ) {
             rol = "admin";
           }
-          const newUser = {
+          const newUser = { first_name,
+            last_name,
+            age,
             email: username,
             password: createHash(password),
             rol,
           };
           const userCreated = await UserModel.create(newUser);
+          console.log(newUser)
           return done(null, userCreated);
         } catch (error) {
           return done(error);

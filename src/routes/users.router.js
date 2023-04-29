@@ -84,4 +84,10 @@ usersRouter.get("/delete", async (req, res) => {
   res.send(deleteall);
 });
 
+usersRouter.get('/current',async(req,res)=>{
+  if (req.user){
+  return  res.send({userInfo: req.user})
+  }
+  res.send('Usuario No Logueado')
+})
 export default usersRouter;

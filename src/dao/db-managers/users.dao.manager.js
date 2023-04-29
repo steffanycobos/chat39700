@@ -4,10 +4,10 @@ import { createHash } from "../../utils.js";
 class UserManager {
   constructor() {}
 
-  async getUser(email, password) {
+  async getUser(name,lastname,age, email, password) {
     const user = await UserModel.findOne({ email: email });
     if (!user) {
-      const newUser = await UserModel.create({ email:email, 
+      const newUser = await UserModel.create({first_name:name,last_name:lastname, age:age, email:email, 
         password: createHash(password)});
 
       return newUser;
