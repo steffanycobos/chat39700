@@ -15,6 +15,17 @@ age: Number,
         type:String,
         required:true
     },
+    cart:{
+        type:[
+            {
+                cart:{
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: 'carts',
+                },
+            },
+        ],
+        default:[],
+    },
     rol: {
         type: String,
         required:true,

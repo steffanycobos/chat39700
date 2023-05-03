@@ -85,8 +85,8 @@ usersRouter.get("/delete", async (req, res) => {
 });
 
 usersRouter.get('/current',async(req,res)=>{
-  if (req.user){
-  return  res.send({userInfo: req.user})
+  if (req.session.user){
+  return  res.send({userInfo: req.session})
   }
   res.send('Usuario No Logueado')
 })

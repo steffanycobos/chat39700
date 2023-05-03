@@ -8,7 +8,7 @@ class UserManager {
     const user = await UserModel.findOne({ email: email });
     if (!user) {
       const newUser = await UserModel.create({first_name:name,last_name:lastname, age:age, email:email, 
-        password: createHash(password)});
+        password: createHash(password), cart});
 
       return newUser;
     } else {
