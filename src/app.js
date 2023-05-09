@@ -14,11 +14,12 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 import passport from "passport";
 import { initializedPassport } from "./config/passport.config.js";
-
+import config from "./config/config.js";
+import { connectDB } from "./config/dbConnection.js";
 
 const app = express();
 
-
+app.use(express.json())
 app.use(urlencoded({ extended: true }));
 app.engine("handlebars", handlebars.engine());
 app.use(express.static(__dirname + "/../public"));
@@ -26,27 +27,16 @@ app.engine("handlebars", engine());
 app.set("view engine", "handlebars");
 app.set("views", __dirname + "/views");
 
+connectDB()
+
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartRouter);
 
+let PORT= config.PORT
 
-
-
-let manager = new ChatManager();
-const httpServer = app.listen(8080, () => {
-  console.log("Server listening on port 8080");
+const httpServer = app.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`);
 });
-
-mongoose
-  .connect(
-    "mongodb+srv://cobosleandra2:171294@cluster0.ydfb7m6.mongodb.net/?retryWrites=true&w=majority"
-  )
-  .then((conn) => {
-    console.log("Connected to DB!");
-  })
-  .catch(() => {
-    console.log("Error");
-  });
 
 
   app.use(session({
@@ -62,7 +52,7 @@ mongoose
   app.use(passport.initialize());
   app.use(passport.session());
 
-  
+let manager = new ChatManager();
 const io = new Server(httpServer);
 
 io.on("connection", (socket) => {

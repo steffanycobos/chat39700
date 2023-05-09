@@ -1,5 +1,6 @@
 import { Router, json } from "express";
 import ProductManager from "../dao/db-managers/products.dao.manager.js";
+import { getProductsController, addProductsController, getProductByIdController, updateProductController, deleteProductController} from "../controllers/products.controller.js";
 import productsModel from "../dao/models/products.models.js";
 //import ProductManager from "../dao/files-manager/productManager.js";
 
@@ -8,6 +9,12 @@ const manager = new ProductManager();
 //let manager = new ProductManager(__dirname+"/dao/files-manager/files/productos.json");
 
 productsRouter.use(json());
+productsRouter.get('/',getProductsController)
+productsRouter.post('/',addProductsController)
+productsRouter.get('/:pid', getProductByIdController )
+productsRouter.put('/', updateProductController)
+productsRouter.delete('/:pid', deleteProductController)
+/*
 //OBTIENE LA CANTIDAD DE PRODUCTOS QUE PASE EL LIMIT
 productsRouter.get("/", async (req, res) => {
   try {
@@ -120,6 +127,6 @@ productsRouter.delete("/:pid", async (req, res) => {
   let pid = req.params.pid;
   const deleteProduct = await manager.deleteProduct(pid);
   res.send({ status: "ok", payload: deleteProduct + "Producto eliminado." });
-});
+});*/
 
 export default productsRouter;
