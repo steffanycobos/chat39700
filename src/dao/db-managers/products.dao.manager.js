@@ -28,8 +28,6 @@ class ProductManager {
     const filter = { _id: id };
     const update = { title, description, price, thumbnail, code, stock };
     let product = await productsModel.findOneAndUpdate(filter, update);
-    
-
     return product;
   }
 

@@ -32,6 +32,7 @@ connectDB()
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartRouter);
 
+
 let PORT= config.PORT
 
 const httpServer = app.listen(PORT, () => {
@@ -51,7 +52,8 @@ const httpServer = app.listen(PORT, () => {
   initializedPassport();
   app.use(passport.initialize());
   app.use(passport.session());
-
+  app.use("/", viewsRouter);
+  app.use('/api/sessions', usersRouter)
 let manager = new ChatManager();
 const io = new Server(httpServer);
 
@@ -72,5 +74,3 @@ app.use((req, res, next) => {
   req.io = io;
   next();
 });
-app.use("/", viewsRouter);
-app.use('/api/sessions', usersRouter)

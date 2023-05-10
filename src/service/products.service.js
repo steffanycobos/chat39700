@@ -26,3 +26,24 @@ export async function deleteProductService(id){
     let productDelete= await manager.deleteProduct(id)
     return productDelete;
 }
+
+export async function ordenPriceService(num){
+    const orden= await manager.ordenPrice(num)
+    return orden
+}
+
+export async function getProductsByQueryTitleService(data){
+    const products= await manager.getProductsByQueryTitle(data)
+    console.log(products, 'Service')
+    return products
+}
+
+export async function getProductsByQueryPriceService(data){
+    const products= await manager.getProductsByQueryPrice(data)
+    return products
+}
+
+export async function getProductsByQueryStockService(data){
+    const product= await manager.getProductsByQueryStock(data)
+    return product
+}

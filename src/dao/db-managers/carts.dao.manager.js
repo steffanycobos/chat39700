@@ -14,9 +14,12 @@ class CartManager {
     return carts;
   };
 
-  async addCart(products) {
-    let cart = await cartsModel.create({ products });
-    return cart;
+  async addCart() {
+    const newCart = {
+      products: [],
+    };
+    const result = await cartsModel.create(newCart);
+    return result;;
   }
 
   async checkCart(id) {
@@ -27,7 +30,7 @@ class CartManager {
   async addProductToCart(cartID, productID) {
     let cart = await cartsModel.findById({ _id: cartID })
     let productDB= await productsModel.findById(productID)
-
+console.log(cart.products)
     const productExiste = cart.products.find((p) => p.product.code === productDB.code);
     if(productExiste){ productExiste.quantity++; 
       cart.save()
@@ -40,12 +43,12 @@ class CartManager {
       return cart
     }
     
-
   }
   async deleteProduct(cartID, productID) {
     const cart = await cartsModel.find({ _id: cartID });
     console.log(cart);
     let productInCart = await manager.deleteProduct(productID);
+    productInCart.save()
     console.log(productID);
     return productInCart;
   }

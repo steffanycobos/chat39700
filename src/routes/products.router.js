@@ -1,12 +1,10 @@
 import { Router, json } from "express";
 import ProductManager from "../dao/db-managers/products.dao.manager.js";
-import { getProductsController, addProductsController, getProductByIdController, updateProductController, deleteProductController} from "../controllers/products.controller.js";
-import productsModel from "../dao/models/products.models.js";
-//import ProductManager from "../dao/files-manager/productManager.js";
+import { getProductsController, addProductsController, getProductByIdController, updateProductController, deleteProductController, ordenPriceController, getProductsByQueryTitleController, getProductsByQueryPriceController, getProductsByQueryStockController} from "../controllers/products.controller.js";
+
 
 const productsRouter = Router();
 const manager = new ProductManager();
-//let manager = new ProductManager(__dirname+"/dao/files-manager/files/productos.json");
 
 productsRouter.use(json());
 productsRouter.get('/',getProductsController)
@@ -14,6 +12,10 @@ productsRouter.post('/',addProductsController)
 productsRouter.get('/:pid', getProductByIdController )
 productsRouter.put('/', updateProductController)
 productsRouter.delete('/:pid', deleteProductController)
+productsRouter.get("/orden/:ord", ordenPriceController)
+productsRouter.get('/title', getProductsByQueryTitleController)
+productsRouter.get('/price', getProductsByQueryPriceController)
+productsRouter.get('stock',getProductsByQueryStockController)
 /*
 //OBTIENE LA CANTIDAD DE PRODUCTOS QUE PASE EL LIMIT
 productsRouter.get("/", async (req, res) => {

@@ -3,7 +3,10 @@ import { createHash } from "../../utils.js";
 
 class UserManager {
   constructor() {}
-
+async findUSer(email){
+  let user= UserModel.findOne({ email: email }).lean();
+  return user
+}
   async getUser(name,lastname,age, email, password) {
     const user = await UserModel.findOne({ email: email });
     if (!user) {
