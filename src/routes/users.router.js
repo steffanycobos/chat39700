@@ -1,19 +1,34 @@
 import { Router, json } from "express";
 import passport from "passport";
-import { getUserController, deleteController, logOutController, currertSessionController, authenticateGitController, failureSignupController, failureLoginController, signupGithubController } from "../controllers/users.controller.js";
+import {currentUserController, loginController, logOutController} from "../controllers/users.controller.js"
 
 const usersRouter = Router();
 
 usersRouter.use(json());
-usersRouter.post("/login", getUserController)
-usersRouter.get("/delete", deleteController);
+usersRouter.post("/login", loginController)
 usersRouter.get("/logout", logOutController);
-usersRouter.get('/current', currertSessionController);
+usersRouter.get('/current', currentUserController);
 usersRouter.get("/github", passport.authenticate("githubSignup"));
-usersRouter.post( "/signup",authenticateGitController);
-usersRouter.get("/failure-signup",failureSignupController);
-usersRouter.get("/login-failes", failureLoginController)
-usersRouter.get( "/github-callback", signupGithubController);
+usersRouter.post(
+    "/signup",
+    passport.authenticate("signupStrategy", {
+      failureRedirect: "/failure-signup",
+    }),
+    async (req, res) => {
+      res.redirect("/profile");
+    }
+  );
+
+
+usersRouter.get(
+  "/github-callback",
+  passport.authenticate("githubSignup", {
+    failureRedirect: "/api/sessions/failure-signup",
+  }),
+  (req, res) => {
+    res.send("Usuario autenticado con éxito.");
+  }
+);
 
 
 export default usersRouter;

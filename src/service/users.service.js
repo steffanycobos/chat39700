@@ -18,5 +18,6 @@ export async function deleteService() {
 }
 export async function findUSerService(email) {
   let user = await manager.findUSer(email);
+  console.log(user,'service')
   return user;
 }

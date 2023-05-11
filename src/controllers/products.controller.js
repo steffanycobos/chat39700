@@ -24,10 +24,8 @@ export  const addProductsController= async(req,res)=>{
 }
 
 export const getProductByIdController= async(req,res)=>{
-    let id= req.params.pid
-    console.log(id)
-    let product= await getProductByIdService(id)
-    console.log(product)
+    let pid= req.params.pid
+    let product= await getProductByIdService(pid)
     res.json({status:"success", payload:product})
 }
 
@@ -55,9 +53,10 @@ export const ordenPriceController=async(req,res)=>{
   }}
 
 export const getProductsByQueryTitleController= async(req,res)=>{
-    let { title } = req.query;
+    let { title }= await req.query;
     console.log(title, 'Controller')
-    res.send({ status: "ok", payload:  await getProductsByQueryTitleService(title) });
+    /*let product=  await getProductsByQueryTitleService(title)
+    res.send({ status: "ok", payload: product});*/
 }
 
 export const getProductsByQueryPriceController= async(req,res)=>{
@@ -69,4 +68,4 @@ export const getProductsByQueryStockController= async(req,res)=>{
     let { stock } = req.query;
     console.log(stock, 'Controller')
     res.send({ status: "ok", payload:  await getProductsByQueryStockService(stock) });
-}
+};

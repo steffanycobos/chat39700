@@ -66,7 +66,7 @@ viewsRouter.get("/signup",(req,res)=>{
 
 viewsRouter.get("/profile", async (req,res) =>{;
   const userData= await userManager.allUsers()
-  let lastUser= (userData.pop()).email
+  let lastUser= (userData.pop()).first_name
   res.render("profile", {lastUser});
 })
 export default viewsRouter;

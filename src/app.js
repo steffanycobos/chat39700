@@ -34,7 +34,6 @@ app.use("/api/carts", cartRouter);
 
 
 let PORT= config.PORT
-
 const httpServer = app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
@@ -42,8 +41,7 @@ const httpServer = app.listen(PORT, () => {
 
   app.use(session({
     store:MongoStore.create({
-      mongoUrl:"mongodb+srv://cobosleandra2:171294@cluster0.ydfb7m6.mongodb.net/?retryWrites=true&w=majority",
-     ttl:10000
+      mongoUrl:config.MONGO_URL
     }),
     secret:"claveSecreta",
     resave:true,
@@ -52,25 +50,26 @@ const httpServer = app.listen(PORT, () => {
   initializedPassport();
   app.use(passport.initialize());
   app.use(passport.session());
+  let manager = new ChatManager();
+  const io = new Server(httpServer);
+  
+  io.on("connection", (socket) => {
+    console.log("New client connected.");
+    
+    socket.on("new-message", async (data) => {
+      const { stat, result } = await manager.newMessage(data);
+      io.emit("messages", result.result);
+    });
+  });
+  
+  app.set("views", __dirname + "/views");
+  app.set("view engine", "handlebars");
+  app.use(express.static(__dirname + "/public"));
+  
+  app.use((req, res, next) => {
+    req.io = io;
+    next();
+  });
   app.use("/", viewsRouter);
   app.use('/api/sessions', usersRouter)
-let manager = new ChatManager();
-const io = new Server(httpServer);
-
-io.on("connection", (socket) => {
-  console.log("New client connected.");
-
-  socket.on("new-message", async (data) => {
-    const { stat, result } = await manager.newMessage(data);
-    io.emit("messages", result.result);
-  });
-});
-
-app.set("views", __dirname + "/views");
-app.set("view engine", "handlebars");
-app.use(express.static(__dirname + "/public"));
-
-app.use((req, res, next) => {
-  req.io = io;
-  next();
-});
+  
