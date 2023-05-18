@@ -1,4 +1,5 @@
-import { getCartService, addCartService, checkCartService,addProductToCartService,deleteProductService,deleteProductsInCartService,updateQuantityService } from "../service/carts.service.js";
+import { getCartService, addCartService, checkCartService,addProductToCartService,deleteProductService,deleteProductsInCartService,updateQuantityService, ticketCartService  } from "../service/carts.service.js";
+
 
 export const getCartController= async(req,res)=>{
     let cart= await getCartService()
@@ -43,4 +44,10 @@ export const updateQuantityController= async(req,res)=>{
     const{quantity}= req.body
     let cart= await updateQuantityService(cid,pid,quantity)
   res.send({status:'ok',payload:cart})
+}
+
+export const ticketCartController= async(req,res)=>{
+    let cid= req.params.cid
+    let cart= await ticketCartService(cid)
+    res.send({status:'ok',payload:cart})
 }

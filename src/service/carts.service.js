@@ -36,3 +36,8 @@ export async function updateQuantityService(cid,pid,quantity){
     let cart= manager.updateQuantity(cid,pid,quantity)
     return cart
 }
+
+export async function ticketCartService(cid){
+    let cart= manager.ticketCart(cid)
+    return cart
+}

@@ -1,10 +1,10 @@
 import { Router, json } from "express";
 import __dirname from "../utils.js";
-import { getCartController, addCartController,checkCartController,addProductToCartController,deleteProductController,deleteProductsInCartController,updateQuantityController } from "../controllers/carts.controller.js";
-import CartManager from "../dao/db-managers/carts.dao.manager.js";
+import { getCartController, addCartController,checkCartController,addProductToCartController,deleteProductController,deleteProductsInCartController,updateQuantityController, ticketCartController } from "../controllers/carts.controller.js";
+
 
 const cartRouter = Router();
-let manager= new CartManager()
+
 
 cartRouter.use(json());
 cartRouter.get('/',getCartController)
@@ -14,11 +14,7 @@ cartRouter.put("/:cid/product/:pid/", addProductToCartController)
 cartRouter.delete('/:cid/product/:pid', deleteProductController)
 cartRouter.delete('/:cid',deleteProductsInCartController)
 cartRouter.put('/:cid/product/:pid', updateQuantityController)
-cartRouter.get('/:cid/purchase',async (req,res)=>{
-    let cid= req.params.cid
-    let cart= manager.ticketCart(cid)
-    res.send(cart)
-})
+cartRouter.get('/:cid/purchase',ticketCartController)
 
 
 export default cartRouter;
