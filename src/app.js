@@ -16,7 +16,7 @@ import passport from "passport";
 import { initializedPassport } from "./config/passport.config.js";
 import config from "./config/config.js";
 import { connectDB } from "./config/dbConnection.js";
-import ticketsRouter from "./routes/tickets.routes.js";
+
 
 const app = express();
 
@@ -75,5 +75,5 @@ const httpServer = app.listen(PORT, () => {
   app.use('/api/sessions', usersRouter)
   app.use("/api/products", productsRouter);
 app.use("/api/carts", cartRouter);
-app.use('/api/tickets',ticketsRouter)
+
   
