@@ -2,6 +2,7 @@ import { getUserService, allUsersService,deleteService, findUSerService } from "
 import { isValidPassword } from "../utils.js";
 import { initializedPassport } from "../config/passport.config.js";
 import passport from "passport";
+import session from "express-session";
 import UserModel from "../dao/models/users.model.js";
 
 
@@ -43,7 +44,12 @@ export const loginController= async (req,res)=>{
     return res.redirect("/products");
   }
 }
+export const userEmail= async (req,res)=>{
+  let user= req.session.username
+  console.log(user)
+  return user
 
+}
 
 export const logOutController=  async (req, res) => {
   req.logOut((error) => {
@@ -60,7 +66,23 @@ export const logOutController=  async (req, res) => {
 
 export const currentUserController= async(req,res)=>{
   if (req.session.user){
+  
   return  res.send({userInfo: req.session})
   }
   res.send('Usuario No Logueado')
+}
+
+export const authenticateAdmin =(rol)=>{
+  return (req,res,next)=>{
+console.log(req.session.rol)
+    if(req.session.rol != 'admin'){
+      return res.json({status:'error', message:'No tienes acceso.'})
+
+    }
+    if((!rol.includes(req.user.rol))){
+      return res.json({status:'error', message:'No estas autorizado.'})
+    }
+    next();
+  }
+
 }
