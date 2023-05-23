@@ -14,7 +14,7 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 import passport from "passport";
 import { initializedPassport } from "./config/passport.config.js";
-import config from "./config/config.js";
+import options from "./config/options.js";
 import { connectDB } from "./config/dbConnection.js";
 
 
@@ -34,7 +34,7 @@ app.use("/api/products", productsRouter);
 app.use("/api/carts", cartRouter);
 
 
-let PORT= config.PORT
+let PORT= options.PORT
 const httpServer = app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
@@ -42,7 +42,7 @@ const httpServer = app.listen(PORT, () => {
 
   app.use(session({
     store:MongoStore.create({
-      mongoUrl:config.MONGO_URL
+      mongoUrl:options.MONGO_URL
     }),
     secret:"claveSecreta",
     resave:true,

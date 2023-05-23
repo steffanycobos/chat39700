@@ -1,6 +1,7 @@
 import passport from "passport";
 import LocalStrategy from "passport-local";
 import UserModel from "../dao/models/users.model.js";
+import { signupEmail, signupTwilio } from "../controllers/users.controller.js";
 import { createHash } from "../utils.js";
 import GithubStrategy from "passport-github2";
 
@@ -34,6 +35,8 @@ export const initializedPassport = () => {
             rol,
           };
           const userCreated = await UserModel.create(newUser);
+          signupEmail()
+         // signupTwilio()
           console.log(newUser)
           return done(null, userCreated);
         } catch (error) {

@@ -3,14 +3,14 @@ import passport from "passport";
 import {
   currentUserController,
   loginController,
-  logOutController,
+  logOutController
 } from "../controllers/users.controller.js";
 
 const usersRouter = Router();
 
 usersRouter.use(json());
 
-usersRouter.post("/login", loginController);
+usersRouter.post("/login",loginController);
 usersRouter.get("/logout", logOutController);
 usersRouter.get("/current", currentUserController);
 usersRouter.get("/github", passport.authenticate("githubSignup"));

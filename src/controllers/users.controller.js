@@ -4,7 +4,8 @@ import { initializedPassport } from "../config/passport.config.js";
 import passport from "passport";
 import session from "express-session";
 import UserModel from "../dao/models/users.model.js";
-
+import transporter from "../config/gmail.js";
+import { twilioPhone,twilioClient } from "../config/twilio.js";
 
 export function initializeController(){
   passport.authenticate("signupStrategy", {
@@ -85,4 +86,43 @@ console.log(req.session.rol)
     next();
   }
 
+}
+
+////// GMAIL
+export const signupEmail=async(req,res)=>{
+const emailTemplate = `<div>
+        <h1>Registro Exitoso!</h1>
+        <img src="https://media.tenor.com/CNomc-858rgAAAAC/ganando-ganando-como-siempre.gif/">
+        <p>Ya puedes iniciar sesións</p>
+        <img width="100px" src="cid:mono" />
+</div>`;
+
+    try {
+        //logica del registro
+        const data = await transporter.sendMail({
+            //estructura del correo
+            from:"Prueba CoderHouse Steffany Cobos",
+            to:'cobosleandra2@gmail.com',
+            subject:"Registro exitoso",
+            html:emailTemplate
+        });
+        console.log("data", data);
+      
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+//////TWILIO
+export const signupTwilio= async (req,res)=>{
+  try {
+    const message = await twilioClient.messages.create({
+        body:"Su compra se realizo correctamente",
+        from: twilioPhone,
+        to:"+525574318332"
+    });
+    console.log("message:", message);
+} catch (error) {
+    console.log(error.message);
+}
 }
