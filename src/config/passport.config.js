@@ -4,7 +4,68 @@ import UserModel from "../dao/models/users.model.js";
 import { signupEmail, signupTwilio } from "../controllers/users.controller.js";
 import { createHash } from "../utils.js";
 import GithubStrategy from "passport-github2";
+import jwt from "passport-jwt";
+import { isValidPassword } from "../utils.js";
 
+const jwtStrategy = jwt.Strategy;
+const ExtractJWT = jwt.ExtractJwt;
+
+export const initializedPassport = () => {
+
+  passport.use(
+    "authJWT",
+    new jwtStrategy(
+      {
+  
+        jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
+        secretOrKey: 'secretToken'
+      },
+      async (jwt_payload, done) => {
+        try {
+          return done(null, jwt_payload);
+        } catch (error) {
+          return done(error);
+        }
+      }
+    )
+  );
+};
+
+export const cookieExtractor = (req) => {
+  let token = null;
+  if (req && req.cookies) {
+    // Extract the token
+    token = req.cookies['secretToken'];
+  }
+  return token;
+};
+/*
+///// AUTENTICACION 
+const jwtStrategy = jwt.Strategy;
+const ExtractJwt = jwt.ExtractJwt;
+
+export const initializeJwt = ()=>{
+    passport.use("jwt", new jwtStrategy(
+        {
+            jwtFromRequest:ExtractJwt.fromExtractors([cookieExtractor]),
+            secretOrKey:"secretToken"
+        },
+        async(jwt_payload, done)=>{
+            try {
+                return done(null,jwt_payload)
+            } catch (error) {
+                return done(error)
+            }
+        }
+    ))
+};
+
+export const cookieExtractor = (req)=>{
+    let token = null;
+    if(req && req.cookies){
+        token= req.cookies["token-cookie"];
+    }
+    return token;
 export const initializedPassport = () => {
   passport.use(
     "signupStrategy",
@@ -45,6 +106,64 @@ export const initializedPassport = () => {
       }
     )
   );
+
+passport.use('loginStrategy', 
+new LocalStrategy(
+  {
+    usernameField:'email',
+    passwordFiel:'password',
+    passReqToCallback:true
+  }, async( req,res,done) =>{
+    const { email, password } = req.body;
+    console.log(email,password)
+  const user = await UserModel.find({ email: email}).lean();
+  console.log(user, 'passport')
+  
+      console.log(email, 'email.s', password, typeof email, typeof password)
+    if (isValidPassword(password, user.password))
+    {
+      return done(null,user);
+    } else {
+      return done(null, false, { message: 'Credenciales inválidas' });
+    }
+  
+  
+  async(req,res,done)=>{
+    try{
+    const { email, password } = req.body;
+  const user = await UserModel.findOne({ email: email }).lean();
+  if (!user) {
+   console.log("Usuario no encontrado!");
+  } else {
+    if (email === "adminCoder@coder.com") {
+      if (isValidPassword(user, password)) {
+        req.session.user = user._id;
+        req.session.username = email;
+        req.session.rol = "admin";
+        console.log(req.session.rol);
+       return  done(null, user)
+      } else {
+        return done(error);
+      }
+    } else {
+      if (isValidPassword(user, password)) {
+        req.session.user = user._id;
+        req.session.username = email;
+        req.session.rol = "user";
+ return done (null, user)
+      // return  done(null, user)
+      } else {
+       console.log("Datos inválidos.");
+      }
+    }
+  }}
+  catch (error) {
+    return done(error);
+  }}
+}))
+
+
+
   /// LOGIN CON GITHUB
   passport.use(
     "githubSignup",
@@ -81,5 +200,8 @@ export const initializedPassport = () => {
     const user = await UserModel.findById(id);
     return done(null, user);
   });
-};
+;
 
+
+}
+*/

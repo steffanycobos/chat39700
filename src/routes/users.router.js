@@ -5,24 +5,16 @@ import {
   loginController,
   logOutController
 } from "../controllers/users.controller.js";
-
+import { signup } from "../service/users.service.js";
 const usersRouter = Router();
 
 usersRouter.use(json());
 
-usersRouter.post("/login",loginController);
+usersRouter.post("/login", loginController);
 usersRouter.get("/logout", logOutController);
 usersRouter.get("/current", currentUserController);
 usersRouter.get("/github", passport.authenticate("githubSignup"));
-usersRouter.post(
-  "/signup",
-  passport.authenticate("signupStrategy", {
-    failureRedirect: "/failure-signup",
-  }),
-  async (req, res) => {
-    res.redirect("/profile");
-  }
-);
+usersRouter.post( "/signup", signup);
 
 usersRouter.get(
   "/github-callback",

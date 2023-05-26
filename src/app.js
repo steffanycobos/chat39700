@@ -16,6 +16,7 @@ import passport from "passport";
 import { initializedPassport } from "./config/passport.config.js";
 import options from "./config/options.js";
 import { connectDB } from "./config/dbConnection.js";
+import cookieParser from "cookie-parser";
 
 
 const app = express();
@@ -39,8 +40,7 @@ const httpServer = app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
 
-
-  app.use(session({
+    app.use(session({
     store:MongoStore.create({
       mongoUrl:options.MONGO_URL
     }),
@@ -49,8 +49,10 @@ const httpServer = app.listen(PORT, () => {
     saveUninitialized:true
   }))
   initializedPassport();
+  app.use(cookieParser())
   app.use(passport.initialize());
   app.use(passport.session());
+  
   let manager = new ChatManager();
   const io = new Server(httpServer);
   
