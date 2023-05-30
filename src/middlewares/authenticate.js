@@ -25,7 +25,7 @@ export const checkRole = (roles) => {
   };
     
 
-/*export const authenticate = (strategy)=>{
+export const authenticate = (strategy)=>{
     const passportAuthenticate = async(req,res,next)=>{
         passport.authenticate(strategy,{session:false},(err,user,info)=>{
             if(err) return next(err);
@@ -37,5 +37,4 @@ export const checkRole = (roles) => {
         })(req,res,next);
     };
     return passportAuthenticate;
-};
-*/
+  }

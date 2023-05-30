@@ -2,7 +2,7 @@ import { json } from "express";
 import fs from "fs";
 
 
-class CartManager {
+class CartManagerFile {
   #path;
   constructor(path) {
     this.#path = path;
@@ -70,4 +70,4 @@ await fs.promises.writeFile(this.#path,(cartsString.replace(allString, cartProdS
   }
 }
 
-export default CartManager;
+export default CartManagerFile;

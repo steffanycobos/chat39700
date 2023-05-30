@@ -1,6 +1,7 @@
 //import { getUserService, allUsersService,deleteService, findUSerService } from "../service/users.service.js";
 import { isValidPassword } from "../utils.js";
 import { initializedPassport } from "../config/passport.config.js";
+
 import passport from "passport";
 import session from "express-session";
 import jwt from "jsonwebtoken";
@@ -18,43 +19,6 @@ export function initializeController(){
   
   })}
 
-
-  export const loginController = async (req, res) => {
-    const email = req.body.email;
-    const password = req.body.password;
-    try {
-      const user = await UserModel.findOne({ email: email }).lean();
-      if (user) {
-        if (isValidPassword(user, password)) {
-          const token = jwt.sign(
-            {
-              _id: user._id,
-              first_name: user.first_name,
-              email: user.email,
-              rol: user.rol,
-            },
-            'secretToken',
-            { expiresIn: "24h" }
-          );
-          res
-            .cookie('secretToken', token, {
-              httpOnly: true,
-            })
-            .redirect("/products");
-          
-        } else {
-          console.log("Wrong Credentials");
-          res.redirect("/login");
-        }
-      } else {
-       console.log("User was not registered");
-        res.redirect("/signup");
-      }
-    } catch (error) {
-      res.json({ stats: "errorLogin", message: error.message });
-    }
-  };
-  
   /*const { email, password } = req.body;
   const user = await UserModel.findOne({ email: email }).lean();
   if (!user) {

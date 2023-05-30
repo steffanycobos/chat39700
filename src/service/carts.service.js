@@ -1,6 +1,6 @@
-import CartManager from "../dao/db-managers/carts.dao.manager.js";
+import { CartManager } from "../dao/factory.js";
 
-let manager= new CartManager();
+let manager= CartManager;
 
 
 export async function getCartService(){

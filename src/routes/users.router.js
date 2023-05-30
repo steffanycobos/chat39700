@@ -2,7 +2,6 @@ import { Router, json } from "express";
 import passport from "passport";
 import {
   currentUserController,
-  loginController,
   logOutController
 } from "../controllers/users.controller.js";
 import { signup } from "../service/users.service.js";
@@ -10,7 +9,7 @@ const usersRouter = Router();
 
 usersRouter.use(json());
 
-usersRouter.post("/login", loginController);
+usersRouter.post("/login", passport.authenticate('loginStrategy'));
 usersRouter.get("/logout", logOutController);
 usersRouter.get("/current", currentUserController);
 usersRouter.get("/github", passport.authenticate("githubSignup"));

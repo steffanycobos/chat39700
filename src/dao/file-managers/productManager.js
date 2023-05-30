@@ -3,7 +3,7 @@ import __dirname from "../../utils.js";
 
 
 
-class ProductManager {
+class ProductManagerFile {
   #path;
   constructor(path) {
     this.#path = path;
@@ -116,4 +116,4 @@ if(!actual){
 }
 
 
-export default ProductManager;
+export default ProductManagerFile;
