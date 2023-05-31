@@ -4,10 +4,10 @@ import UserModel from "../dao/models/users.model.js";
 import { signupEmail, signupTwilio } from "../controllers/users.controller.js";
 import { createHash } from "../utils.js";
 import GithubStrategy from "passport-github2";
-import jwt from "passport-jwt";
 import { isValidPassword } from "../utils.js";
 
 export const initializedPassport = () => {
+  ///LOGIN 
   passport.use("loginStrategy",
     new LocalStrategy(
       {
@@ -15,7 +15,7 @@ export const initializedPassport = () => {
         passwordFiel: "password",
         passReqToCallback: true,
       },
-      async (req, res, done) => {
+      async (req, username,password, done) => {
         try {
           const { email, password } = req.body;
           console.log(email, password);
@@ -37,7 +37,7 @@ export const initializedPassport = () => {
     )
   );
 ;
-
+/////SIGNUP
 passport.use(
   "signupStrategy",
   new LocalStrategy(
@@ -80,8 +80,7 @@ passport.use(
 );
 
 /// LOGIN CON GITHUB
-passport.use(
-  "githubSignup",
+passport.use( "githubSignup",
   new GithubStrategy(
     {
       clientID: "Iv1.7a4cc81d82f6b4fe",
@@ -108,7 +107,7 @@ passport.use(
 
 //SERIALIZAR
 passport.serializeUser((user, done) => {
-  done(null, user._id);
+  done(null, user[0]._id);
 });
 
 passport.deserializeUser(async (id, done) => {

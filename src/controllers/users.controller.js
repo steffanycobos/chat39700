@@ -9,13 +9,6 @@ import { twilioPhone,twilioClient } from "../config/twilio.js";
 
 
 
-export function initializeController(){
-  passport.authenticate("signupStrategy", {
-    failureRedirect: "/failure-signup"},
-  async (req, res) => {
-    res.redirect("/profile")
-  
-  })}
 
   export const loginController = async(req,res)=>{
     const { email, password }= req.body;
