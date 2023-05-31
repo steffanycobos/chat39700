@@ -5,8 +5,7 @@ import options from "./options.js"
 const adminEmail= options.ADMIN_EMAIL_GMAIL
 const adminPassword= options.ADMIN_PASSWORD_GMAIL
 
-
-const transporter= nodemailer.createTransport({
+function transporter(){ nodemailer.createTransport({
     host:"smtp.gmail.com",
     port: 587,
     auth:{
@@ -17,4 +16,6 @@ const transporter= nodemailer.createTransport({
     tls:{
         rejectUnauthorized:false
     }
-})
+})}
+
+export default transporter;

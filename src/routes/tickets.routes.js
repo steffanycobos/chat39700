@@ -4,7 +4,7 @@ import TicketManager from "../dao/db-managers/tickets.dao.manager.js";
 
 let manager= new TicketManager()
 const ticketsRouter = Router();
-ticketsRouter.use(json());
+
 ticketsRouter.use(urlencoded({ extended: true }));
 ticketsRouter.get('/ticket', async(req,res)=>{
     let ticket= await manager.newTicket()

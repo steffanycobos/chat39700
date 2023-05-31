@@ -7,7 +7,7 @@ import { getCartController, addCartController,checkCartController,addProductToCa
 const cartRouter = Router();
 
 
-cartRouter.use(json());
+
 cartRouter.get('/',getCartController)
 cartRouter.post('/',addCartController)
 cartRouter.get('/:cid',checkCartController)

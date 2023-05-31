@@ -8,7 +8,7 @@ import { generateProducts,madeProduct} from "../utils.js";
 
 const productsRouter = Router();
 
-productsRouter.use(json());
+
 productsRouter.use(urlencoded({ extended: true }));
 productsRouter.get('/mockingproducts',mockingController)
 productsRouter.get('/',getProductsController)
