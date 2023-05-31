@@ -1,7 +1,6 @@
-import ProductManager from "../dao/db-managers/products.dao.manager.js"
+import { ProductManager } from "../dao/factory.js";
 
-let manager= new ProductManager();
-
+let manager= ProductManager
 export async function getProductsService(){
     let products= await manager.getProducts()
     return products

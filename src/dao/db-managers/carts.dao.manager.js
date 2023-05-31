@@ -7,7 +7,7 @@ import ticketsModel from "../models/tickets.models.js";
 import { v4 as uuidv4 } from "uuid";
 
 let manager = new ProductManager();
-class CartManager {
+class CartManagerDB {
   constructor() {}
 
   getCart = async () => {
@@ -115,4 +115,4 @@ class CartManager {
   }
 }
 
-export default CartManager;
+export default CartManagerDB;

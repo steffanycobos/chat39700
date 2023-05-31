@@ -1,28 +1,28 @@
 import { Router, json } from "express";
 import passport from "passport";
-import {
+import {loginController,
   currentUserController,
-  loginController,
   logOutController,
-} from "../controllers/users.controller.js";
+checkRole} from "../controllers/users.controller.js";
 
 const usersRouter = Router();
 
 usersRouter.use(json());
 
-usersRouter.post("/login", loginController);
+usersRouter.post("/login",passport.authenticate('loginStrategy',{
+}),
+(req,res)=>{
+  res.redirect('/products')
+});
 usersRouter.get("/logout", logOutController);
 usersRouter.get("/current", currentUserController);
 usersRouter.get("/github", passport.authenticate("githubSignup"));
-usersRouter.post(
-  "/signup",
-  passport.authenticate("signupStrategy", {
-    failureRedirect: "/failure-signup",
-  }),
-  async (req, res) => {
-    res.redirect("/profile");
-  }
-);
+usersRouter.post( "/signup", passport.authenticate('signupStrategy',{
+  failureRedirect: "/api/sessions/failure-signup"
+}),
+(req,res)=>{
+  res.redirect('/profile')
+});
 
 usersRouter.get(
   "/github-callback",

@@ -1,10 +1,36 @@
 import passport from "passport";
 import LocalStrategy from "passport-local";
 import UserModel from "../dao/models/users.model.js";
+import { signupEmail, signupTwilio } from "../controllers/users.controller.js";
 import { createHash } from "../utils.js";
 import GithubStrategy from "passport-github2";
+import jwt from "passport-jwt";
+import { isValidPassword } from "../utils.js";
 
 export const initializedPassport = () => {
+passport.use('loginStrategy', 
+new LocalStrategy(
+  {
+    usernameField:'email',
+    passwordFiel:'password',
+    passReqToCallback:true
+  }, async( req,res,done) =>{
+    const { email, password } = req.body;
+    console.log(email,password)
+  const user = await UserModel.find({ email: email}).lean();
+  console.log(user, 'passport')
+  
+      console.log(password, user[0].password)
+    if (isValidPassword(password, user[0].password))
+    {console.log(password, user[0].password,'passport')
+      return done(null,user);
+    } else {
+      return done(null, false, { message: 'Credenciales inválidas' });}
+    }))
+  
+  }
+
+
   passport.use(
     "signupStrategy",
     new LocalStrategy(
@@ -34,6 +60,8 @@ export const initializedPassport = () => {
             rol,
           };
           const userCreated = await UserModel.create(newUser);
+          signupEmail()
+         // signupTwilio()
           console.log(newUser)
           return done(null, userCreated);
         } catch (error) {
@@ -42,6 +70,9 @@ export const initializedPassport = () => {
       }
     )
   );
+ 
+
+
   /// LOGIN CON GITHUB
   passport.use(
     "githubSignup",
@@ -78,5 +109,7 @@ export const initializedPassport = () => {
     const user = await UserModel.findById(id);
     return done(null, user);
   });
-};
+;
+
+
 

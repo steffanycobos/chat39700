@@ -1,5 +1,8 @@
 import { getProductByIdService, getProductsService, addProductsService,updateProductService, deleteProductService
- , ordenPriceService, getProductsByQueryTitleService,getProductsByQueryPriceService,getProductsByQueryStockService} from "../service/products.service.js";
+ , ordenPriceService} from "../service/products.service.js";
+ import { EError } from "../enums/EError.js";
+ import { CustomError, generateUserErrorInfo } from "../service/constumError.service.js";
+import { generateProducts } from "../utils.js";
 
  export  const getProductsController= async (req,res)=>{
 try {
@@ -18,7 +21,16 @@ try {
 }
 
 export  const addProductsController= async(req,res)=>{
-    let { title, description, price, thumbnail, code, stock }= req.body
+ let { title, description, price, thumbnail, code, stock }= req.body
+    
+   if( !title || !price ){
+  CustomError.createError({
+    name:'Error por usuario',
+    cause:  generateUserErrorInfo(req.body),
+    message: "Error creando nuevo producto.",
+    errorCode:EError.INVALID_JSON
+  })
+    }
     let newProduct= await addProductsService(title, description, price, thumbnail, code, stock)
     res.json({status:"success", payload:newProduct})
 }
@@ -52,20 +64,7 @@ export const ordenPriceController=async(req,res)=>{
         res.send({ status: "ok", payload: await getProductsService() });
   }}
 
-export const getProductsByQueryTitleController= async(req,res)=>{
-    let { title }= await req.query;
-    console.log(title, 'Controller')
-    /*let product=  await getProductsByQueryTitleService(title)
-    res.send({ status: "ok", payload: product});*/
+export const mockingController= async(req,res)=>{
+  let products=  generateProducts()
+  res.send({ status: "ok", payload: products })
 }
-
-export const getProductsByQueryPriceController= async(req,res)=>{
-    let { price } = req.query;
-    console.log(price, 'Controller')
-    res.send({ status: "ok", payload:  await getProductsByQueryPriceService(price) });
-}
-export const getProductsByQueryStockController= async(req,res)=>{
-    let { stock } = req.query;
-    console.log(stock, 'Controller')
-    res.send({ status: "ok", payload:  await getProductsByQueryStockService(stock) });
-};

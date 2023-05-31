@@ -1,6 +1,6 @@
 import productsModel from "../models/products.models.js";
 
-class ProductManager {
+class ProductManagerDB {
   constructor() {}
 
   async getProducts() {
@@ -67,4 +67,4 @@ class ProductManager {
 }
 
 
-export default ProductManager;
+export default ProductManagerDB;
