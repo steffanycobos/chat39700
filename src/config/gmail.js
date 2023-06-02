@@ -1,8 +1,8 @@
 import nodemailer from "nodemailer"
 import options from "./options.js"
 
-const adminEmail= options.ADMIN_EMAIL_GMAIL
-const adminPassword= options.ADMIN_PASSWORD_GMAIL
+const adminEmail= options.ADMIN_EMAIL
+const adminPassword= options.ADMIN_PASSWORD
 
 const transporter= nodemailer.createTransport({
     host:"smtp.gmail.com",

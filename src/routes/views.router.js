@@ -13,10 +13,6 @@ const userManager= new UserManager()
 viewsRouter.get('/', async (req,res)=>{
   res.render('login')
 })
-/*viewsRouter.get("/", async (req, res) => {
-  const products = await productManager.getProducts();
-  res.render("home",{products});
-});*/
 
 viewsRouter.get("/real-time-products", async (req, res) => {
   const products = await productManager.getProducts();
@@ -41,6 +37,7 @@ viewsRouter.get('/products/:pid', async (req,res)=>{  try {
 
 })
 viewsRouter.get('/products', async (req,res)=>{ 
+  console.log('req.user', req.user)
    try {
     const products =await  productManager.getProducts();
     res.render("products", { products });
@@ -68,5 +65,16 @@ viewsRouter.get("/profile", async (req,res) =>{;
   const userData= await userManager.allUsers()
   let lastUser= (userData.pop()).first_name
   res.render("profile", {lastUser});
+})
+
+viewsRouter.get('/loggerTest', async (req,res)=>{
+
+  req.logger.debug("nivel debug");
+  req.logger.http("nivel http");
+  req.logger.info("nivel info");
+  req.logger.warning("nivel warn");
+  req.logger.error("nivel error");
+  req.logger.fatal("nivel fatal");
+  res.send("Prueba logger")
 })
 export default viewsRouter;

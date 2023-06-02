@@ -36,7 +36,6 @@ export function createHash(password) {
 }
 
 export function isValidPassword(user, password) {
-  console.log(user,password,'utils')
   return bcrypt.compareSync(user, password);
 }
 const __filename = fileURLToPath(import.meta.url);

@@ -18,19 +18,17 @@ export const initializedPassport = () => {
       async (req, username,password, done) => {
         try {
           const { email, password } = req.body;
-          console.log(email, password);
-          const user = await UserModel.find({ email: email }).lean();
+          const user = await UserModel.findOne({ email: email }).lean();
           
-          console.log(user, "passport");
-          console.log(password, user[0].password);
-         
-          if (isValidPassword(password, user[0].password)) {
-            console.log(password, user[0].password, "passport");
+          if (isValidPassword(password, user.password)) {
             return done(null, user);
-          } else {
+          } 
+          else{
+            req.logger.warning('Credenciales Inválidas')
             return done(null, false, { message: "Credenciales inválidas" });
           }
-        } catch (err) {
+        }
+         catch (err) {
           return done(err);
         }
       }
@@ -50,6 +48,7 @@ passport.use(
         const { first_name, last_name, age } = req.body;
         const user = await UserModel.findOne({ email: username });
         if (user) {
+          req.logger.info('Usuario registrado anteriormente.')
           return done(null, false);
         }
         let rol = "user";
@@ -68,9 +67,9 @@ passport.use(
           rol,
         };
         const userCreated = await UserModel.create(newUser);
-        signupEmail();
+        await signupEmail();
         // signupTwilio()
-        console.log(newUser);
+        req.logger.info(newUser);
         return done(null, userCreated);
       } catch (error) {
         return done(error);
@@ -107,7 +106,7 @@ passport.use( "githubSignup",
 
 //SERIALIZAR
 passport.serializeUser((user, done) => {
-  done(null, user[0]._id);
+  done(null, user._id);
 });
 
 passport.deserializeUser(async (id, done) => {

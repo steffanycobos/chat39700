@@ -1,11 +1,9 @@
 
-//import { getUserService, allUsersService,deleteService, findUSerService } from "../service/users.service.js";
 import { isValidPassword } from "../utils.js";
-import { initializedPassport } from "../config/passport.config.js";
-import passport from "passport";
 import UserModel from "../dao/models/users.model.js";
 import transporter from "../config/gmail.js";
 import { twilioPhone,twilioClient } from "../config/twilio.js";
+import { addLogger } from "../utils/logger.js";
 
 
 
@@ -14,15 +12,14 @@ import { twilioPhone,twilioClient } from "../config/twilio.js";
     const { email, password }= req.body;
   const user = await UserModel.findOne({ email: email }).lean();
   if (!user) {
+    //req.logger.warning('Usuario No Encontrado')
     res.send("Usuario no encontrado!");
   } else {
     if (email === "adminCoder@coder.com") {
-      console.log(req.session)
       if (isValidPassword(user, password)) {
         req.session.user = user._id;
         req.session.username = email;
         req.session.rol = "admin";
-        console.log(req.session.rol);
         return res.redirect("/products");
       } else {
         res.send("Datos inválidos");
@@ -32,7 +29,6 @@ import { twilioPhone,twilioClient } from "../config/twilio.js";
         req.session.user = user._id;
         req.session.username = email;
         req.session.rol = "user";
-        console.log( req.session,'login')
         return res.redirect("/products");
       } else {
         res.send("Datos inválidos.");
@@ -40,26 +36,10 @@ import { twilioPhone,twilioClient } from "../config/twilio.js";
     }
     return res.redirect("/products");
   }}
-  export const checkRole = (roles) => {
-    return (req, res, next) => {
-      // AUTENTICADO
-      console.log(req.session, 'controller')
-      if (!req.session) {
-        return res.json({
-          status: "error",
-          message: "You need to be authenticated",
-        });
-      }
-      // AUTORIZADO
-      if (!roles.include(req.session.rol)) {
-        return res.json({ status: "error", message: "You are not authorized" });
-      }
-      next();
-    };
-  };
+
+
 export const userEmail= async (req,res)=>{
   let user= req.session.username
-  console.log(user)
   return user
 
 }
@@ -78,9 +58,9 @@ export const logOutController=  async (req, res) => {
 }
 
 export const currentUserController= async(req,res)=>{
-  if (req.session.user){
+  if (req.user){
   
-  return  res.send({userInfo: req.session})
+  return  res.send({userInfo: req.user})
   }
   res.send('Usuario No Logueado')
 }
@@ -96,20 +76,19 @@ const emailTemplate = `<div>
 </div>`;
 
     try {
-        //logica del registro
+      
         const data = await transporter.sendMail({
-            //estructura del correo
             from:"Prueba CoderHouse Steffany Cobos",
             to:'cobosleandra2@gmail.com',
             subject:"Registro exitoso",
             html:emailTemplate
         });
-        console.log("data", data);
+        req.logger.info(data);
       
     } catch (error) {
-        console.log(error.message);
+     req.logger.warning(error)
     }
-}
+  }
 
 //////TWILIO
 export const signupTwilio= async (req,res)=>{
@@ -119,7 +98,8 @@ export const signupTwilio= async (req,res)=>{
         from: twilioPhone,
         to:"+525574318332"
     });
-    console.log("message:", message);
+req.logger.info("message:", message);
 } catch (error) {
-    console.log(error.message);
-}}
+req.logger.warnig(error.message);
+}
+}

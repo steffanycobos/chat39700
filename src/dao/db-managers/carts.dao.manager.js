@@ -13,7 +13,6 @@ class CartManagerDB {
 
   getCart = async () => {
     let carts = await cartsModel.find();
-    console.log(carts, "dao");
     return carts;
   };
 
