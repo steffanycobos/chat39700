@@ -4,9 +4,13 @@ import { getProductByIdService, getProductsService, addProductsService,updatePro
  import { CustomError, generateUserErrorInfo } from "../service/constumError.service.js";
 import { generateProducts } from "../utils.js";
 
+
+
+
  export  const getProductsController= async (req,res)=>{
 try {
     const products = await getProductsService();
+
     const { limit } = await req.query;
 
     if (limit) {

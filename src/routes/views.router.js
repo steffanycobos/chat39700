@@ -69,12 +69,12 @@ viewsRouter.get("/profile", async (req,res) =>{;
 
 viewsRouter.get('/loggerTest', async (req,res)=>{
 
-  req.logger.debug("nivel debug");
-  req.logger.http("nivel http");
-  req.logger.info("nivel info");
-  req.logger.warning("nivel warn");
-  req.logger.error("nivel error");
-  req.logger.fatal("nivel fatal");
-  res.send("Prueba logger")
+  req.logger.debug("Nivel debug");
+  req.logger.http("Nivel http");
+  req.logger.info("Nivel info");
+  req.logger.warning("Nivel warning");
+  req.logger.error("Nivel error");
+  req.logger.fatal("Nivel fatal");
+  res.send("Prueba de loggers")
 })
 export default viewsRouter;

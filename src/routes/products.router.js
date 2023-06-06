@@ -9,11 +9,11 @@ const productsRouter = Router();
 
 productsRouter.use(urlencoded({ extended: true }));
 productsRouter.get('/mockingproducts',mockingController)
-productsRouter.get('/', checkRole(['user']), getProductsController)
-productsRouter.post('/', addProductsController)
+productsRouter.get('/', getProductsController)
+productsRouter.post('/', checkRole(['admin']) ,addProductsController)
 productsRouter.get('/:pid', getProductByIdController )
-productsRouter.put('/', updateProductController)
-productsRouter.delete('/:pid', deleteProductController)
+productsRouter.put('/', checkRole(['admin']), updateProductController)
+productsRouter.delete('/:pid', checkRole(['admin']), deleteProductController)
 
 
 export default productsRouter;
