@@ -58,6 +58,6 @@ export const addLogger = (req, res, next) => {
   } else if (currentEnv === "prod") {
     req.logger = prodLogger;
   }
-  req.logger.http(`${req.url} - method: ${req.method}  ProductionEnviorment`);
+  req.logger.http(`${req.url} - method: ${req.method}  -env: ${currentEnv}`);
   next();
 };

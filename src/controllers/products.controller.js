@@ -46,9 +46,15 @@ export const getProductByIdController= async(req,res)=>{
 }
 
 export const updateProductController= async(req,res)=>{
+  try{
     const {id, title, description, price, thumbnail, code, stock}=req.body
+    console.log(id)
     let product= await updateProductService(id, title, description, price, thumbnail, code, stock)
-    res.json({status:"success", payload:product})
+    res.json({status:"success", payload:product})}
+    catch(err){
+      res.send({status: 'error',payload:err})
+
+    }
 }
 export const deleteProductController= async(req,res)=>{
     let id= req.params.pid

@@ -4,6 +4,7 @@ import CartManager from "../dao/db-managers/carts.dao.manager.js";
 import MessageManager from "../dao/db-managers/messages.dao.js";
 import UserManager from "../dao/db-managers/users.dao.manager.js";
 
+
 const viewsRouter = Router();
 const productManager = new ProductManager();
 const cartManager= new CartManager()
@@ -37,7 +38,7 @@ viewsRouter.get('/products/:pid', async (req,res)=>{  try {
 
 })
 viewsRouter.get('/products', async (req,res)=>{ 
-  console.log('req.user', req.user)
+  //console.log('req.user', req.user)
    try {
     const products =await  productManager.getProducts();
     res.render("products", { products });
@@ -60,13 +61,24 @@ viewsRouter.get("/signup",(req,res)=>{
   res.render("register");
  
 });
-
+viewsRouter.get('/add',(req,res)=>{
+  res.render('addProducts')
+})
+viewsRouter.get('/update',(req,res)=>{
+  res.render('updateProducts')
+})
 viewsRouter.get("/profile", async (req,res) =>{;
   const userData= await userManager.allUsers()
   let lastUser= (userData.pop()).first_name
   res.render("profile", {lastUser});
 })
-
+viewsRouter.get ('/forgot-password', async (req,res)=>{
+  res.render('forgotPassword')
+})
+viewsRouter.get('/reset-password',async(req,res)=>{
+  const token = req.query.token;
+  res.render('resetPassword', {token})
+})
 viewsRouter.get('/loggerTest', async (req,res)=>{
 
   req.logger.debug("Nivel debug");

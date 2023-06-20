@@ -52,10 +52,8 @@ passport.use(
           return done(null, false);
         }
         let rol = "user";
-        if (
-          username === "adminCoder@coder.com" &&
-          password === "adminCod3r123"
-        ) {
+        if ( username === "adminCoder@coder.com" ) 
+        {
           rol = "admin";
         }
         const newUser = {
@@ -67,7 +65,7 @@ passport.use(
           rol,
         };
         const userCreated = await UserModel.create(newUser);
-        await signupEmail();
+        await signupEmail(newUser.email);
         // signupTwilio()
         req.logger.info(newUser);
         return done(null, userCreated);

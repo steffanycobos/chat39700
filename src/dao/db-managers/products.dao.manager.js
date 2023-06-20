@@ -10,6 +10,8 @@ class ProductManagerDB {
   }
 
   async addProducts(title, description, price, thumbnail, code, stock) {
+
+    let owner
     let newProduct = await productsModel.create({
       title,
       description,
@@ -17,7 +19,9 @@ class ProductManagerDB {
       thumbnail,
       code,
       stock,
+      owner
     });
+    console.log('newProduct:', newProduct)
     return newProduct;
   }
 
@@ -29,6 +33,7 @@ class ProductManagerDB {
     const filter = { _id: id };
     const update = { title, description, price, thumbnail, code, stock };
     let product = await productsModel.findOneAndUpdate(filter, update);
+    product.save()
     return product;
   }
 

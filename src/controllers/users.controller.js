@@ -1,48 +1,13 @@
 
-import { isValidPassword } from "../utils.js";
 import UserModel from "../dao/models/users.model.js";
-import transporter from "../config/gmail.js";
+import { changeRoleService } from "../service/users.service.js";
+import {transporter, sendRecoveryPass} from "../config/gmail.js";
 import { twilioPhone,twilioClient } from "../config/twilio.js";
-import { addLogger } from "../utils/logger.js";
+import { generateEmailToken, verifyEmailToken } from "../utils.js";
+import { isValidPassword } from "../utils.js";
+import { createHash } from "../utils.js";
 
 
-
-
-  export const loginController = async(req,res)=>{
-    const { email, password }= req.body;
-  const user = await UserModel.findOne({ email: email }).lean();
-  if (!user) {
-    //req.logger.warning('Usuario No Encontrado')
-    res.send("Usuario no encontrado!");
-  } else {
-    if (email === "adminCoder@coder.com") {
-      if (isValidPassword(user, password)) {
-        req.session.user = user._id;
-        req.session.username = email;
-        req.session.rol = "admin";
-        return res.redirect("/products");
-      } else {
-        res.send("Datos inválidos");
-      }
-    } else {
-      if (isValidPassword(user, password)) {
-        req.session.user = user._id;
-        req.session.username = email;
-        req.session.rol = "user";
-        return res.redirect("/products");
-      } else {
-        res.send("Datos inválidos.");
-      }
-    }
-    return res.redirect("/products");
-  }}
-
-
-export const userEmail= async (req,res)=>{
-  let user= req.session.username
-  return user
-
-}
 
 export const logOutController=  async (req, res) => {
   req.logOut((error) => {
@@ -67,7 +32,7 @@ export const currentUserController= async(req,res)=>{
 
 
 ////// GMAIL
-export const signupEmail=async(req,res)=>{
+export  async function  signupEmail(email){
 const emailTemplate = `<div>
         <h1>Registro Exitoso!</h1>
         <img src="https://media.tenor.com/CNomc-858rgAAAAC/ganando-ganando-como-siempre.gif/">
@@ -79,14 +44,14 @@ const emailTemplate = `<div>
       
         const data = await transporter.sendMail({
             from:"Prueba CoderHouse Steffany Cobos",
-            to:'cobosleandra2@gmail.com',
+            to: email,
             subject:"Registro exitoso",
             html:emailTemplate
         });
-        req.logger.info(data);
+  console.log(data)
       
     } catch (error) {
-     req.logger.warning(error)
+     console.log(error)
     }
   }
 
@@ -102,4 +67,19 @@ req.logger.info("message:", message);
 } catch (error) {
 req.logger.warnig(error.message);
 }
+}
+
+////CAMBIAR ROL
+export const changeRoleController= async(req,res)=>{
+  try{
+    let changeRole= await changeRoleService()
+    if (changeRole){
+      return res.send( 'Rol del Usuario modificado con éxito.')
+    }else{
+      return res.send( 'Rol del Usuario no pudo ser modificado.')
+    }
+    }
+    catch(err){
+res.send
+    }
 }

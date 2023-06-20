@@ -1,8 +1,6 @@
 
 import cartsModel from "../models/carts.models.js";
 import ProductManager from "./products.dao.manager.js";
-import { userEmail } from "../../controllers/users.controller.js";
-import mongoose from "mongoose";
 import productsModel from "../models/products.models.js";
 import ticketsModel from "../models/tickets.models.js";
 import { v4 as uuidv4 } from "uuid";

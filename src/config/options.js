@@ -14,4 +14,6 @@ TWILIO_TOKEN: process.env.TWILIO_TOKEN,
 TWILIO_PHONE: process.env.TWILIO_PHONE,
  PERSISTENCE: process.env.PERSISTENCE,
 productsFileName: "productos.json",
- cartsFileName: "carts.json"}
+ cartsFileName: "carts.json",
+EMAIL_TOKEN: process.env.EMAIL_TOKEN
+}

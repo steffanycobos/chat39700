@@ -2,7 +2,7 @@
 export const checkRole = (roles) => {
     return (req, res, next) => {
       // AUTENTICADO
-      console.log(req.user)
+      //console.log(req.user, 'check')
       if (!req.user) {
         return res.json({
           status: "error",
