@@ -11,15 +11,13 @@ class ProductManagerDB {
 
   async addProducts(title, description, price, thumbnail, code, stock) {
 
-    let owner
     let newProduct = await productsModel.create({
       title,
       description,
       price,
       thumbnail,
       code,
-      stock,
-      owner
+      stock
     });
     console.log('newProduct:', newProduct)
     return newProduct;

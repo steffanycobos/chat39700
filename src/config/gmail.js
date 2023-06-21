@@ -18,7 +18,7 @@ export  const transporter= nodemailer.createTransport({
 })
 
 export const sendRecoveryPass = async(userEmail,token)=>{
-    const link = `http://localhost:8080/reset-password?token=${token}`;//enlace con el token
+    const link = `http://localhost:8080/reset-password?token=${token}`;
 
     //estructura del correo
     await transporter.sendMail({

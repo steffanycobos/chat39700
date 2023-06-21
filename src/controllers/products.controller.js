@@ -1,10 +1,7 @@
-import { getProductByIdService, getProductsService, addProductsService,updateProductService, deleteProductService
- , ordenPriceService} from "../service/products.service.js";
- import { EError } from "../enums/EError.js";
- import { CustomError, generateUserErrorInfo } from "../service/constumError.service.js";
+import { getProductByIdService, getProductsService, addProductsService,updateProductService, deleteProductService} from "../service/products.service.js";
+import { EError } from "../enums/EError.js";
+import { CustomError, generateUserErrorInfo } from "../service/constumError.service.js";
 import { generateProducts } from "../utils.js";
-
-
 
 
  export  const getProductsController= async (req,res)=>{
@@ -26,6 +23,7 @@ try {
 
 export  const addProductsController= async(req,res)=>{
  let { title, description, price, thumbnail, code, stock }= req.body
+
     
    if( !title || !price ){
   CustomError.createError({
@@ -36,8 +34,11 @@ export  const addProductsController= async(req,res)=>{
   })
     }
     let newProduct= await addProductsService(title, description, price, thumbnail, code, stock)
+    newProduct.owner= req.user._id
+    newProduct.save()
     res.json({status:"success", payload:newProduct})
-}
+
+return newProduct}
 
 export const getProductByIdController= async(req,res)=>{
     let pid= req.params.pid
@@ -57,25 +58,32 @@ export const updateProductController= async(req,res)=>{
     }
 }
 export const deleteProductController= async(req,res)=>{
+
     let id= req.params.pid
-    let product= await deleteProductService(id)
-    res.json({status:"success", payload:product})
+    let productId= await getProductByIdService(id)
+
+    if(productId){
+    const productOwner = JSON.stringify(productId[0].owner)
+    const userId = JSON.stringify(req.user._id)
+      if((req.user.rol === "premium" && productOwner === userId) || (req.user.rol === "admin")){
+        let product= await deleteProductService(id)
+        res.json({status:"success", payload:product})
+    
+      } else {
+          res.json({status:"error", message:"No estas autorizado para eliminar este producto."})
+      }
+  } else {
+      return res.json({status:"error", message:"El producto no existe"});
+  }
 }
 
-export const ordenPriceController=async(req,res)=>{
-    let num = req.params.ord;
-    if (num === "asc") {
-      const products = await ordenPriceService(1);
-      res.send({ status: "ok", payload: products });
-    } else if (num === "desc") {
-      const products = await ordenPriceService(-1);
-      res.send({ status: "ok", payload: products });
-    } else {
-        res.send({ status: "ok", payload: await getProductsService() });
-  }}
 
 export const mockingController= async(req,res)=>{
-  let products=  generateProducts()
-  res.send({ status: "ok", payload: products })
-
+  try{
+    let products= generateProducts()
+    res.send({ status: "ok", payload: products })
+  
+  } catch (err){
+  res.send({message:err})
+  }
 }

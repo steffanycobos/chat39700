@@ -27,8 +27,7 @@ code: {
      required: true,
    },
    owner:{
-type: String,
-default:'admin',
+type: mongoose.SchemaTypes.ObjectId,
 ref:'users'
    }
  },
