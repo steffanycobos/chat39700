@@ -12,7 +12,7 @@ productsRouter.get('/mockingproducts',mockingController)
 productsRouter.get('/', getProductsController)
 productsRouter.post('/add', checkRole(['premium','admin'])  ,addProductsController)
 productsRouter.get('/:pid', getProductByIdController )
-productsRouter.put('/', checkRole(['admin']), updateProductController)
+productsRouter.put('/:pid', checkRole(['admin']), updateProductController)
 productsRouter.delete('/:pid', checkRole(['admin', 'premium']), deleteProductController)
 
 

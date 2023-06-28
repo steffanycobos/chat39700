@@ -1,0 +1,135 @@
+paths:
+/api/sessions/login:
+post:
+sumary: Loguea a un usuario previamente registrado.
+tags: 
+-Users
+response:
+        "200":
+          description: El usuario fue logueado correctamente.
+        "401":
+          description: Error por credenciales inválidas.
+        "500":
+          description: Error interno del servidor.
+
+/api/sessions/signup:
+post:
+sumary: Registra a un nuevo usuario.
+tags:
+-Users
+response:
+        "200":
+          description: El usuario fue creado correctamente.
+        "401":
+          description: Error por email ya registrado anteriormente.
+        "500":
+          description: Error interno del servidor.
+
+/api/sessions/forgot-password:
+post:
+sumary: Link para crear nueva contraseña.
+tags:
+-Users
+response:
+        "200":
+          description: Se envio el email correctamente.
+        "401":
+          description: Error por email ya registrado anteriormente.
+        "500":
+          description: Error interno del servidor.
+
+/api/sessions/reset-password:
+post:
+sumary: Resetar password y adquirir una nueva.
+tags:
+-Users
+response:
+        "200":
+          description: Se actualizó la contraseña correctamente .
+        "401":
+          description: Error.
+        "500":
+          description: Error interno del servidor.
+
+/api/sessions/premium/{uid}:
+put:
+sumary: Cambio de rol del usuario actual entre user y premium.
+tags:
+-Users
+  parameters:
+        - name: uid
+          in: path
+          required: true
+          description: uid es el id del usuario que desea cambiar de rol.
+          schema:
+            $type: string
+response:
+        "200":
+          description: Cambio de rol satisfactorio.
+        "401":
+          description: Usuario no encontrado.
+        "500":
+          description: Error interno del servidor.
+
+
+/api/sessions/failure-login:
+get:
+sumary: Fallo al iniciar sesión.
+tags:
+-Users
+response:
+       +
+        "401":
+          description: No se pudo iniciar sesión.
+        "500":
+          description: Error interno del servidor.
+
+/api/sessions/logout:
+get:
+sumary: Cerrar sesión.
+tags:
+-Users
+response:
+        "200":
+          description: Sesión cerrada satisfactoriamente.
+        "401":
+          description: No se pudo cerrar sesión.
+        "500":
+          description: Error interno del servidor.
+
+/api/sessions/current:
+get:
+sumary: Usuacio conectado.
+tags:
+-Users
+response:
+        "200":
+          description: Datos del usuario conectado.
+        "401":
+          description: No hay usuario logueado.
+        "500":
+          description: Error interno del servidor.
+
+/api/sessions/github:
+get:
+sumary: Conectarse con github.
+tags:
+-Users
+response:
+        "200":
+          description: Sesión iniciada con github satisfactoriamente.
+        "401":
+          description: No se pudo iniciar sesión.
+        "500":
+          description: Error interno del servidor.
+
+/api/sessions/failure-signup:
+get:
+sumary: Fallo al iniciar sesión.
+tags:
+-Users
+response:
+        "401":
+          description: No se pudo iniciar sesión.
+        "500":
+          description: Error interno del servidor.

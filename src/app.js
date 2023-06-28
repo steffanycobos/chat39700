@@ -1,9 +1,7 @@
 import express from "express";
-import mongoose, { Error } from "mongoose";
 import { urlencoded } from "express";
 import handlebars from "express-handlebars";
 import __dirname from "./utils.js";
-import { engine } from "express-handlebars";
 import { Server } from "socket.io";
 import session from "express-session";
 import MongoStore from "connect-mongo";
@@ -13,6 +11,8 @@ import options from "./config/options.js";
 import { connectDB } from "./config/dbConnection.js";
 import cookieParser from "cookie-parser";
 import { addLogger } from "./utils/logger.js";
+import { swaggerSpecs } from "./config/docs.config.js";
+import swaggerUi from "swagger-ui-express"
 
 import ChatManager from "./dao/db-managers/messages.dao.js"
 
@@ -22,7 +22,7 @@ import viewsRouter from "./routes/views.router.js";
 import usersRouter from "./routes/users.router.js";
 
 const app = express();
-
+console.log(__dirname, 'dirnamen')
 app.use(express.json())
 app.use(urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/../public"));
@@ -69,4 +69,5 @@ app.use("/", viewsRouter);
 app.use('/api/sessions', usersRouter)
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartRouter);
+app.use("/api/docs",swaggerUi.serve,swaggerUi.setup(swaggerSpecs));
 
