@@ -1,128 +1,116 @@
-paths: 
-/api/products:
-get:
-      summary: Obtener todos los productos.
+paths:
+  /api/products/:
+    get:
+      summary: Obtiene todos los productos.
       tags:
         - Products
       responses:
         "200":
-          description: Todos los productos fueron obtenidos correctamente
+          description: Todos los productos fueron obtenidos.
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#components/schemas/products'
+                  $ref: "#components/schemas/Product"
         "401":
-          description: Error por falta de permisos.
+          description: Error por falta de permisos
         "500":
-          description: Error interno del servidor.
-put:
- summary: Acts.
+          description: Error interno del servidor
+    
+  /api/products/add:
+    post:
+      summary: Agrega un nuevo producto.
       tags:
-        - Products
-      responses:
-        "200":
-          description: Todos los productos fueron obtenidos correctamente
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#components/schemas/products'
-        "401":
-          description: Error por falta de permisos.
-        "500":
-          description: Error interno del servidor.
-
-/api/products/add:
-post:
-sumary: Agregar un nuevo producto.
-      tags:
-        - Products
-        requestBody:
+      - Products
+      requestBody:
         required: true
         content:
-          application/json:
-            schema:
-              $ref: "#components/requestBodies/UpdateProduct"
-      responses:
-        "200":
-          description: Todos los productos fueron obtenidos correctamente
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#components/schemas/products'
-        "401":
-          description: Error por falta de permisos.
-        "500":
-          description: Error interno del servidor.
-
-/api/products/{pid}:
-get:
-summary: Obtener producto con id dado por parametros.
+           application/json:
+             schema:
+              $ref: '#/components/schemas/Product'
+      response:
+      '200':
+         description: Producto agregado.
+      '400':
+         description: Error al agregar producto.
+      '500':
+         description: Error interno en el servidor.
+     
+  /api/products/{pid}:
+    get:
+      summary: Obtiene producto por ID.
       tags:
         - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: pid es el id del producto a obtener.
+          schema:
+            $type: string
       responses:
         "200":
           description: Producto encontrado.
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#components/schemas/products'
-        "401":
-          description: No se encuentra producto con ese ID.
+                $ref: "#components/schemas/Product"
         "500":
-          description: Error interno del servidor.
-
-put:
-summary: Modificar producto con in dado por parámetros.
+          description: Error interno del servidador.
+    delete:
+      summary: Elimina un producto del ID dado.
       tags:
-        - Products
+      - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: pid es el ID del producto que queremos eliminar.
+          schema:
+            $type: string
       responses:
-        "200":
-          description: Producto actualizado.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#components/schemas/products'
-        "401":
-          description: Error por falta de permisos.
-        "500":
-          description: Error interno del servidor.
-
-delete:
-summary: Eliminar producto con ID dado.
-      tags:
-        - Products
-      responses:
-        "200":
+        '200':
           description: Producto eliminado.
+        '400':
+          description: Producto no encontrado.
+        '500':
+          description: Error interno en el servidor
+
+    put:
+      summary: Actualizar producto por id.
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: pid el id del producto que se quiere actualizar.
+          schema:
+            $type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/updateProduct"
+      responses:
+        "200":
+          description: El producto se actualizo.
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#components/schemas/products'
-        "401":
-          description: Error por falta de permisos.
+                $ref: "#components/schemas/Product"
         "500":
-          description: Error interno del servidor.
-
+          description: Error interno del servidador.
 components:
   schemas:
-      Products:
+    Product:
       type: object
       properties:
         _id:
           type: ObjectId
-          description: id del producto.
+          description: ID generado por MongoDB.
         title:
           type: string
           description: Nombre del producto.
@@ -130,54 +118,96 @@ components:
           type: string
           description: Descripción del producto.
         price:
-          type: numbre
+          type: number
           description: Precio del producto.
         thumbnail:
           type: string
           description: Imagen del producto.
         code:
           type: string
-          description: Código único del producto.
+          description: Código del producto.
         stock:
           type: number
-          description: Cantidad de producto disponible.
+          description: Stock del producto.
         owner:
-          type: object
-          description: Creador del producto.
-
-      example:
-    _id: ObjectId("gsa98273skjhgda8912")
-    title: Camisa
-    description: Azul oscura.
-    price: 80
-    thumbnail: "google.com/photos/camisas"
-    code: "0258"
-    stock: 25
-    owner: ObjectId("gsa98273skjhkjhgsasd12")
-  requestBodies:
-    UpdateProduct:
-         title:
           type: string
-          description: Nombre del producto.
+          description: Creador del producto.
+      example:
+        _id: 64934f532fee8fd1ce51e596
+        title: product1
+        description: desc1
+        price: 300
+        thumbnail: "100"
+        code: "100"
+        stock: 56
+        owner: 64933c9f6d7c7a3b5e484e71
+  requestBodies:
+    updateProduct:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: ID generado por MongoDB.
+        title:
+          type: string
+          description: product title
         description:
+          type: string
+          description: product description
+        price:
+          type: number
+          description: product price
+        thumbnail:
+          type: string
+          description: product thumbnail
+        code:
+          type: string
+          description: product code
+        stock:
+          type: number
+          description: product stock
+        owner:
+          type: string
+          description: product owner
+      example:
+        _id: 64934f532fee8fd1ce51e596
+        title: Camisa
+        description: Roja
+        price: 300
+        thumbnail: "Sin Imagen"
+        code: "0258"
+        stock: 54
+        owner: 64933c9f6d7c7a3b5e484e71
+    
+    addProduct:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: ID generado por MongoDB.
+        title:
           type: string
           description: Descripción del producto.
         price:
-          type: numbre
+          type: number
           description: Precio del producto.
         thumbnail:
           type: string
           description: Imagen del producto.
         code:
           type: string
-          description: Código único del producto.
+          description: Código del producto.
         stock:
           type: number
-          description: Cantidad de producto disponible.
+          description: Stock del producto.
+        owner:
+          type: ObjectId
+          description: Creador del producto.
       example:
-       title: Camisa
-    description: Azul clara.
-    price: 70
-    thumbnail: Sin imagen.
-    code: "0258"
-    stock: 25
+      _id: 4d64d47dddff47f
+      title: Camisa
+      description: Azul claro.
+      price: 100
+      code: '0258'
+      stock: 14
+      owner: 84hir93834h433k

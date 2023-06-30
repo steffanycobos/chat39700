@@ -1,153 +1,149 @@
-paths: 
-/api/carts:
-get:
-      summary: Obtener todos los carritos
+paths:
+  /api/carts/:
+    get:
+      summary: Obtiene todos los carritos existentes.
       tags:
         - Carts
       responses:
         "200":
-          description: Todos los carritos fueron obtenidos correctamente
+          description: Todos los carritos.
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#components/schemas/carts'
+                  $ref: "#components/schemas/Cart"
         "401":
-          description: Error por falta de permisos.
+          description: Sin autorización para acceder.
         "500":
-          description: Error interno del servidor.
-post:
- summary: Agregar un nuevo carrito.
+          description: Error interno en el servidor.
+  /api/carts/{cid}:
+    get:
+      summary: Obtener carrito por ID dado.
       tags:
         - Carts
-      responses:
-        "200":
-          description: Nuevo carrito agregado.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#components/schemas/carts'
-        "401":
-          description: No fue posible agregar un nuevo carro.
-        "500":
-          description: Error interno del servidor.
-
-/api/carts/{cid}:
-get:
-summary: Obtener un carrito según su ID.
-      tags:
-        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: cid es el ID del carrito requerido
+          schema:
+            $type: string
       responses:
         "200":
           description: Carrito encontrado.
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#components/schemas/carts'
-        "401":
-          description: No existe un carrito con ese ID.
+                $ref: "#components/schemas/Cart"
         "500":
-          description: Error interno del servidor.
-
-delete:
-summary: Eliminar un carrito según su ID.
+          description: Error interno en el servidor.
+    put:
+      summary: Actualizar carrito segun su ID.
       tags:
         - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: cid es el ID del carrito a actualizar.
+          schema:
+            $type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/updateCart"
       responses:
         "200":
+          description: Carrito actualizado.
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Cart"
+        "500":
+          description: Error interno en el servidor.
+    delete:
+      summary: Elimina el carrito con el ID dado.
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          requerid: true
+          description: cid es el ID del carrito que se eliminará.
+          schema:
+            $type: string
+      responses:
+        '200':
           description: Carrito eliminado.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#components/schemas/carts'
-        "401":
-          description: No existe un carrito con ese ID.
-        "500":
+        '400':
+          description: No se encontro el carrito a eliminar.
+        '500':
           description: Error interno del servidor.
 
-/api/carts/{cid}/product/{pid}:
-put:
-summary: Agregar un producto especifico a un carrito especifico.
+  /api/carts/{cid}/product/{pid}:
+    put:
+      summary: Agrega un producto con id PID en el carrito con id CID.
       tags:
         - Carts
-      responses:
-        "200":
-          description: Producto Agregado.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#components/schemas/carts'
-        "401":
-          description: No existe un carrito o producto con ese ID.
-        "500":
-          description: Error interno del servidor.
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: cid es id ID del carrito al que agregaremos productos.
+          schema:
+            $type: string
+        - name: pid
+          in: path
+          required: true
+          description: pid es el ID del producto que agregaremos.
+          schema:
+            $type: string
+    delete:
+      summary: Elimina producto especifico en el carrito.
+      tags:
+       - Carts
+      parameters:
+       - name: cid
+         in: path
+         requerid: true
+         description:  cid es id ID del carrito en el que eliminamos productos.
+         schema:
+           $type: string
+       - name: pid
+         in: path
+         requerid: true
+         description:  pid es el producto que vamos a eliminar.
+         schema:
+           $type: string
 
-delete:
-summary: Elminar un producto especifico en un carrito especifico.
-      tags:
-        - Carts
-      responses:
-        "200":
-          description: Producto eliminado del carrito.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#components/schemas/carts'
-        "401":
-          description: No exito un producto con ese id en el carrito.
-        "500":
-          description: Error interno del servidor.
-
-  /api/carts/{cid}/purchase:
-  get:
-  summary: Devuelve el ticket de comprar con el total a pagar y todos los productos en el carrito del usuario.
-      tags:
-        - Carts
-      responses:
-        "200":
-          description: Ticket.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#components/schemas/tickets'
-        "401":
-          description: No hay productos en el carrito.
-        "500":
-          description: Error interno del servidor.
-  
-  components:
+components:
   schemas:
     Cart:
       type: object
       properties:
         _id:
           type: ObjectId
-          description: id del carrito.
-       products:
+          description: id generado por Mongo.
+        products:
           type: array
-          description: Productos dentro del carrito con sus cantidades.
-        
+          description: Todos los productos en el carrito.
+
       example:
-        _id: ObjectId("gsa98273skjhgda8912"){
-        products: [{
-          _id: ObjectId("gsa98273skjhkjhgsasd12"),
-          quantity: 5
-        },
-        {
-          _id: ObjectId("73skjhksssdjhgsasd12"),
-          quantity: 1
-        }]
-  
+        _id: 64934f532fee8fd1ce51e596
+        products: product1
+  requestBodies:
+    updateCart:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: id generado por Mongo.
+        products:
+          type: string
+          description: Todos los productos en el carrito.
+      example:
+        _id: 64934f532fee8fd1ce51e596
+        products: product1
