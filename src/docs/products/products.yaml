@@ -208,6 +208,7 @@ components:
       title: Camisa
       description: Azul claro.
       price: 100
+      thumbnail: 'Sin Imagen'
       code: '0258'
       stock: 14
       owner: 84hir93834h433k

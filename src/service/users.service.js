@@ -28,7 +28,9 @@ export const signup = async (req, res) => {
         rol,
       };
       const userCreated = await UserModel.create(newUser);
+      res.send({status:'ok',payload: userCreated})
         res.redirect("/profile");
+        userCreated.save()
     } 
   
     }

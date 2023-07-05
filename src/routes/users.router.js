@@ -3,6 +3,7 @@ import passport from "passport";
 import {currentUserController, logOutController, changeRoleController} from "../controllers/users.controller.js";
 import {checkRole} from "../middlewares/authenticate.js"
 import { forgotPasswordService, resetPasswordService } from "../service/users.service.js";
+import { signup } from "../service/users.service.js";
 
 const usersRouter = Router();
 
@@ -30,6 +31,7 @@ usersRouter.post("/signup", passport.authenticate('signupStrategy', {
     failureRedirect: "/api/sessions/failure-signup" }), (req, res) => {
     res.redirect('/profile')
   });
+
 
 usersRouter.get('/failure-signup', (req,res)=>{  //FAILURE SIGN UP
     res.send('No se pudo realizar registro.');

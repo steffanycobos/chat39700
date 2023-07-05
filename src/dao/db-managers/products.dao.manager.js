@@ -20,6 +20,7 @@ class ProductManagerDB {
       stock
     });
     console.log('newProduct:', newProduct)
+
     return newProduct;
   }
 
