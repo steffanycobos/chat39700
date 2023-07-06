@@ -10,7 +10,7 @@
   "scripts": {
     "start": "node ./src/app.js",
     "dev": "nodemon ./src/app.js",
-    "test": "mocha --exit --recursive --timeout 5000 test/supertest.test.js"
+    "test": "mocha --exit --recursive --timeout 5000 test/carts.test.js"
   },
   "keywords": [],
   "author": "",
