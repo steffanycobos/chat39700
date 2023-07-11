@@ -10,7 +10,7 @@ export const getCartController= async(req,res)=>{
 export const addCartController= async(req,res)=>{
 
     const result= await addCartService()
-    res.status(201).send({ status: "ok", payload: result });
+    res.status(201).send({ status:'success', payload: result });
 }
 
 export const checkCartController= async(req,res)=>{
