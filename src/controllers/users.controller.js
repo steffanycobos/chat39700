@@ -1,25 +1,25 @@
 
 import UserModel from "../dao/models/users.model.js";
-import { changeRoleService } from "../service/users.service.js";
-import {transporter, sendRecoveryPass} from "../config/gmail.js";
+import {transporter} from "../config/gmail.js";
 import { twilioPhone,twilioClient } from "../config/twilio.js";
-import { generateEmailToken, verifyEmailToken } from "../utils.js";
-import { isValidPassword } from "../utils.js";
-import { createHash } from "../utils.js";
 
 
 
 export const logOutController=  async (req, res) => {
-  req.logOut((error) => {
-    if (error) {
-      return res.send("No fue posible cerrar sesión.");
-    } else {
-      req.session.destroy((err) => {
-        if (err) return res.send("No fue posible cerrar sesión.");
-        res.redirect("/");
-      });
-    }
-  });
+ 
+  const user = {...req.user};
+    req.session.destroy(async(err)=>{
+        if(err){
+          return res.json({status:"error", message:"No fue posible cerrar sesión."})
+        }
+        else{
+          user.last_connection = new Date();
+        const userUpdated = await UserModel.findByIdAndUpdate(user._doc._id,user);
+       userUpdated.save()
+        res.redirect('/login')
+        }
+      
+    });
 }
 
 export const currentUserController= async(req,res)=>{
@@ -48,7 +48,6 @@ const emailTemplate = `<div>
             subject:"Registro exitoso",
             html:emailTemplate
         });
-  console.log(data)
       
     } catch (error) {
      console.log(error)
@@ -69,17 +68,41 @@ req.logger.warnig(error.message);
 }
 }
 
-////CAMBIAR ROL
-export const changeRoleController= async(req,res)=>{
-  try{
-    let changeRole= await changeRoleService()
-    if (changeRole){
-      return res.send( 'Rol del Usuario modificado con éxito.')
-    }else{
-      return res.send( 'Rol del Usuario no pudo ser modificado.')
+//// SUBIR DOCUMENTOS
+
+export const uploadDocumentsController= async (req,res)=>{
+  try {
+    const userId = req.params.uid;
+    const user = await UserModel.findById(userId);
+    if(user){
+        const identificacion = req.files['identificacion']?.[0] || null;
+        const domicilio = req.files['domicilio']?.[0] || null;
+        const estadoDeCuenta = req.files['estadoDeCuenta']?.[0] || null;
+        const docs = [];
+        if(identificacion){
+            docs.push({name:"identificacion",reference:identificacion.filename});
+        }
+        if(domicilio){
+            docs.push({name:"domicilio",reference:domicilio.filename});
+        }
+        if(estadoDeCuenta){
+            docs.push({name:"estadoDeCuenta",reference:estadoDeCuenta.filename});
+        }
+        if(docs.length === 3){
+            user.status = "Completo";
+        } else {
+            user.status = "Incompleto";
+        }
+        user.documents = docs;
+        const userUpdated = await UserModel.findByIdAndUpdate(user._id,user);
+        userUpdated.save()
+        res.json({status:"success", message:"Documentos cargados."});
+
+    } else {
+        res.json({status:"error", message:"No fue posible cargar los documentos."})
     }
-    }
-    catch(err){
-res.send
-    }
+} catch (error) {
+    console.log(error.message);
+    res.json({status:"error", message:"Error al cargar los documentos."})
+}
 }

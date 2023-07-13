@@ -6,6 +6,7 @@ import { createHash } from "../utils.js";
 import GithubStrategy from "passport-github2";
 import { isValidPassword } from "../utils.js";
 
+
 export const initializedPassport = () => {
   ///LOGIN 
   passport.use("loginStrategy",
@@ -21,7 +22,9 @@ export const initializedPassport = () => {
           const user = await UserModel.findOne({ email: email }).lean();
           
           if (isValidPassword(password, user.password)) {
-            return done(null, user);
+       user.last_connection= new Date();
+       const userUpdated = await UserModel.findByIdAndUpdate(user._id,user);
+            return done(null, userUpdated);
           } 
           else{
             req.logger.warning('Credenciales Inválidas')
@@ -46,6 +49,7 @@ passport.use(
     async (req, username, password, done) => {
       try {
         const { first_name, last_name, age } = req.body;
+        (console.log(req.file))
         const user = await UserModel.findOne({ email: username });
         if (user) {
           req.logger.info('Usuario registrado anteriormente.')
@@ -63,6 +67,7 @@ passport.use(
           email: username,
           password: createHash(password),
           rol,
+          avatar: req.file.path
         };
         const userCreated = await UserModel.create(newUser);
         await signupEmail(newUser.email);

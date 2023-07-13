@@ -22,7 +22,7 @@ import viewsRouter from "./routes/views.router.js";
 import usersRouter from "./routes/users.router.js";
 
 const app = express();
-console.log(__dirname, 'dirnamen')
+
 app.use(express.json())
 app.use(urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/../public"));

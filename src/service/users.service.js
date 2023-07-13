@@ -6,34 +6,6 @@ import { createHash } from "../utils.js";
 
 let manager = new UserManager();
 
-export const signup = async (req, res) => {
-    const { first_name, last_name, email, age, password } = req.body;
-    console.log(first_name, last_name, email, age, password)
-    const user = await UserModel.findOne({email:email})
-    console.log(user, req.user.email, 'service')
-    if (user) {  
-      console.log("User was already registered");
-    res.redirect("/login");
-  } else{
-      let rol = "user";
-      if (email.endsWith("@coder.com")) {
-        rol = "admin";
-      }
-      const newUser = {
-        first_name,
-        last_name,
-        email,
-        age,
-        password: createHash(password),
-        rol,
-      };
-      const userCreated = await UserModel.create(newUser);
-      res.send({status:'ok',payload: userCreated})
-        res.redirect("/profile");
-        userCreated.save()
-    } 
-  
-    }
 
 export async function allUsersService() {
   let users = await manager.allUsers();
@@ -50,12 +22,18 @@ export async function findUSerService(email) {
   return user;
 }
 
- export async function changeRoleService(req,res) {
+ export async function changeRoleService(req,res,id) {
    try {
-     const userId = req.params.uid;
-     console.log(userId, 'id')
-     const user = await manager.findUSerbyId(userId);
+     id = req.params.uid
+     const user = await manager.findUSerbyId(id);
+     if (user.documents.length<3){
+      res.send('No es posible hacer el cambio de rol')
+     } else if (0>user.documents.length<=2){
+      res.send ('No se pudo hacer el cambio de rol. Faltan cargar documentos.')
+     } else if(user.documents.leght==3){
+
      const userRol = user.rol;
+     user.status='Completo'
      if (userRol === "user") {
        user.rol = "premium"
      } else if (userRol === "premium") {
@@ -65,11 +43,12 @@ export async function findUSerService(email) {
        _id: user._id
      }, user);
      return userModificado
-   } catch (err) {
-     console.log(err.message);
+   }
+  } catch (err){
+    return console.log(err.message)
    }
  }
-
+ 
  export async function forgotPasswordService(req,res){
   try {
     const {email} = req.body;

@@ -1,9 +1,9 @@
 import {Router} from "express";
 import passport from "passport";
-import {currentUserController, logOutController, changeRoleController} from "../controllers/users.controller.js";
-import {checkRole} from "../middlewares/authenticate.js"
+import {currentUserController, logOutController, uploadDocumentsController} from "../controllers/users.controller.js";
 import { forgotPasswordService, resetPasswordService } from "../service/users.service.js";
-import { signup } from "../service/users.service.js";
+import { uploaderDocuments, uploaderProfile } from "../utils.js";
+import { changeRoleService } from "../service/users.service.js";
 
 const usersRouter = Router();
 
@@ -16,8 +16,8 @@ usersRouter.post("/login", passport.authenticate('loginStrategy', {
 
 usersRouter.post('/forgot-password', forgotPasswordService) //FORGOT PASSWORD 
 usersRouter.post('/reset-password',resetPasswordService) //RESET PASSWORD
-usersRouter.put("/premium/:uid", checkRole(['user']),changeRoleController)//CHANGE ROL
-
+usersRouter.put("/premium/:uid",changeRoleService)//CHANGE ROL
+usersRouter.put("/:uid/documents", uploaderDocuments.fields([{name:"identificacion",maxCount:1}, {name:"domicilio",maxCount:1},{name:"estadoDeCuenta",maxCount:1}]), uploadDocumentsController)
 usersRouter.get('/failure-login', (req,res)=>{
     res.send('No se pudo realizar el inicio de sesión.');
     });
@@ -27,7 +27,7 @@ usersRouter.get("/current", currentUserController); //CURRENT USER
 usersRouter.get("/github", passport.authenticate("githubSignup")); //LOGIN GITHUB
 
 //SIGN UP
-usersRouter.post("/signup", passport.authenticate('signupStrategy', {
+usersRouter.post("/signup",uploaderProfile.single('avatar'), passport.authenticate('signupStrategy', {
     failureRedirect: "/api/sessions/failure-signup" }), (req, res) => {
     res.redirect('/profile')
   });
