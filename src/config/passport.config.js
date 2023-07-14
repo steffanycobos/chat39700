@@ -5,7 +5,7 @@ import { signupEmail, signupTwilio } from "../controllers/users.controller.js";
 import { createHash } from "../utils.js";
 import GithubStrategy from "passport-github2";
 import { isValidPassword } from "../utils.js";
-
+import path from 'path'
 
 export const initializedPassport = () => {
   ///LOGIN 
@@ -48,8 +48,9 @@ passport.use(
     },
     async (req, username, password, done) => {
       try {
-        const { first_name, last_name, age } = req.body;
-        (console.log(req.file))
+       let { first_name, last_name, age, avatar} = req.body;
+        //avatar=req.file;
+        (console.log(avatar))
         const user = await UserModel.findOne({ email: username });
         if (user) {
           req.logger.info('Usuario registrado anteriormente.')
@@ -67,7 +68,7 @@ passport.use(
           email: username,
           password: createHash(password),
           rol,
-          avatar: req.file.path
+          avatar:req.file.path
         };
         const userCreated = await UserModel.create(newUser);
         await signupEmail(newUser.email);
@@ -87,7 +88,7 @@ passport.use( "githubSignup",
     {
       clientID: "Iv1.7a4cc81d82f6b4fe",
       clientSecret: "9b340afe9f8f589b7e534396d269f08129861cd3",
-      callbackURL: "http://localhost:8080/api/sessions/github-callback",
+      callbackURL: "http://localhost:8080/api/auth/github-callback",
     },
     async (accessToken, refreshToken, profile, done) => {
       try {

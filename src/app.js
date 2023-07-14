@@ -20,6 +20,7 @@ import productsRouter from "./routes/products.router.js";
 import cartRouter from "./routes/cart.router.js";
 import viewsRouter from "./routes/views.router.js";
 import usersRouter from "./routes/users.router.js";
+import authRouter from "./routes/auth.router.js";
 
 const app = express();
 
@@ -66,7 +67,8 @@ app.use((req, res, next) => {
 });
 app.use(addLogger);
 app.use("/", viewsRouter);
-app.use('/api/sessions', usersRouter)
+app.use('/api/users', usersRouter);
+app.use('/api/auth', authRouter);
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartRouter);
 app.use("/api/docs",swaggerUi.serve,swaggerUi.setup(swaggerSpecs));
