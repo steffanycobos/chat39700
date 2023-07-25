@@ -1,5 +1,6 @@
 import { getProductByIdService, getProductsService, addProductsService,updateProductService, deleteProductService} from "../service/products.service.js";
 import { EError } from "../enums/EError.js";
+import { transporter } from "../config/gmail.js";
 import { CustomError, generateUserErrorInfo } from "../service/constumError.service.js";
 import { generateProducts } from "../utils.js";
 
@@ -38,7 +39,8 @@ export  const addProductsController= async(req,res)=>{
     newProduct.save()
     res.json({status:"success", payload:newProduct})
 
-return newProduct}
+return newProduct
+}
 
 export const getProductByIdController= async(req,res)=>{
     let pid= req.params.pid
@@ -58,11 +60,30 @@ export const updateProductController= async(req,res)=>{
 
     }
 }
+/// ENVIA EMAIL DE PRODUCTO ELIMINADO
+export async function deleteProductEmail(email) {
+  const emailTemplate = `<div>
+        <h1>Producto Eliminado!</h1> 
+        <p>Eliminaste productos de tu carrito</p>
+        <img width="100px" src="cid:mono" />
+</div>`;
+  try {
+    const data = await transporter.sendMail({
+      from: "Prueba CoderHouse Steffany Cobos",
+      to: email,
+      subject: "Eliminaste productos de tu carrito!",
+      html: emailTemplate,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export const deleteProductController= async(req,res)=>{
 
     let id= req.params.pid
     let productId= await getProductByIdService(id)
-
+ 
     if(productId){
     const productOwner = JSON.stringify(productId[0].owner)
     const userId = JSON.stringify(req.user._id)
@@ -70,6 +91,8 @@ export const deleteProductController= async(req,res)=>{
         let product= await deleteProductService(id)
         res.json({status:"success", payload:product})
     
+      }else if(req.user.rol==='premium'){
+        deleteProductEmail(req.user.email)
       } else {
           res.json({status:"error", message:"No estas autorizado para eliminar este producto."})
       }

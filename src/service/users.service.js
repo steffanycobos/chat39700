@@ -12,9 +12,16 @@ export async function allUsersService() {
   return users;
 }
 
-export async function deleteService() {
-  let deletedUser = await manager.delete();
+
+export async function deleteUserService(id) {
+  try{
+  let deletedUser = await manager.delete(id);
+ console.log('Usuarios Eliminados')
   return deletedUser;
+}
+  catch(err){
+   console.log(err,'err')
+  }
 }
 export async function findUSerService(email) {
   let user = await manager.findUSer(email);

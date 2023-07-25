@@ -16,6 +16,7 @@ class UserManager {
     });
     return user
   }
+ 
   async getUser(name, lastname, age, email, password) {
     const user = await UserModel.findOne({
       email: email
@@ -40,9 +41,9 @@ class UserManager {
     return users;
   }
 
-  async delete() {
-    const deletemany = UserModel.deleteMany({});
-    return deletemany;
+  async delete(id) {
+    const deleteUser = UserModel.deleteOne({_id:id});
+    return deleteUser;
   }
 
   async changeRole(req,res){

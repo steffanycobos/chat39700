@@ -28,7 +28,8 @@ viewsRouter.get("/chat", async (req, res) => {
     res.send("error");
   }
 });
-viewsRouter.get('/products/:pid', async (req,res)=>{  try {
+viewsRouter.get('/products/:pid', async (req,res)=>{  
+  try {
   const pid= req.params.pid
   const products =await  productManager.getProductById(pid);
   res.render("products", { products});
@@ -38,10 +39,9 @@ viewsRouter.get('/products/:pid', async (req,res)=>{  try {
 
 })
 viewsRouter.get('/products', async (req,res)=>{ 
-  //console.log('req.user', req.user)
    try {
     const products =await  productManager.getProducts();
-    res.render("products", { products });
+    res.render("products",  {products} );
 } catch (err) {
   res.send(err);
 }
@@ -64,9 +64,7 @@ viewsRouter.get("/signup",(req,res)=>{
 viewsRouter.get('/add',(req,res)=>{
   res.render('addProducts')
 })
-viewsRouter.get('/update',(req,res)=>{
-  res.render('updateProducts')
-})
+
 viewsRouter.get("/profile", async (req,res) =>{;
   const userData= await userManager.allUsers()
   let lastUser= (userData.pop()).first_name
