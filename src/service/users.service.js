@@ -16,7 +16,6 @@ export async function allUsersService() {
 export async function deleteUserService(id) {
   try{
   let deletedUser = await manager.delete(id);
- console.log('Usuarios Eliminados')
   return deletedUser;
 }
   catch(err){
@@ -25,35 +24,22 @@ export async function deleteUserService(id) {
 }
 export async function findUSerService(email) {
   let user = await manager.findUSer(email);
-  console.log(user,'service')
+
   return user;
 }
 
  export async function changeRoleService(req,res,id) {
-   try {
-     id = req.params.uid
-     const user = await manager.findUSerbyId(id);
-     if (user.documents.length<3){
-      res.send('No es posible hacer el cambio de rol')
-     } else if (0>user.documents.length<=2){
-      res.send ('No se pudo hacer el cambio de rol. Faltan cargar documentos.')
-     } else if(user.documents.leght==3){
 
-     const userRol = user.rol;
-     user.status='Completo'
-     if (userRol === "user") {
-       user.rol = "premium"
-     } else if (userRol === "premium") {
-       user.rol = "user"
-     }
-     let userModificado = await UserModel.updateOne({
-       _id: user._id
-     }, user);
-     return userModificado
+   id = req.params.uid
+  const user = await manager.findUSerbyId(id);
+  if(user.documents.length ==3){
+   user.rol= 'premium'
+   user.save()
+   return  res.send('Rol cambiado con éxito.')
+   } else{
+    res.send( 'No se pudo realizar el cambio de rol, faltan documentos por cargar.')
    }
-  } catch (err){
-    return console.log(err.message)
-   }
+  
  }
  
  export async function forgotPasswordService(req,res){
@@ -67,7 +53,7 @@ const user= await manager.findUSer(email)
     await sendRecoveryPass(email,token);
     res.send("Se envio un email a tu cuenta para restablecer la contraseña.  <a href='/login'> <button> Ir a Login </button> </a>");
 } catch (error) {
-  console.log(error)
+  req.logger.warning(error)
     res.send(`<div>Error, <a href="/forgot-password">Intente de nuevo</a></div>`)
 }
 }
@@ -92,10 +78,10 @@ export async function resetPasswordService(req,res){
         ...user._doc,
         password:createHash(newPassword)
     }
-    console.log("userData",userData)
+  req.logger.info("userData",userData)
     const userUpdate = await UserModel.findOneAndUpdate({email:email},userData);
    res.render("login",{message:"contraseña actualizada"});
 } catch (error) {
-console.log(error);
+req.logger.warning(error);
 }
 }

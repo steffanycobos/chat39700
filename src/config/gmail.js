@@ -27,7 +27,7 @@ export const sendRecoveryPass = async(userEmail,token)=>{
         html:`
             <div>
                 <h2>Solicitaste un cambio de contraseña</h2>
-                <p>Da click en el siguiente enlace para restablecer tu contraseña</p>
+                <p>Da click en el siguiente enlace para restablecer tu contraseña.</p>
                 <a href="${link}">
                     <button> Restablecer contraseña </button>
                 </a>

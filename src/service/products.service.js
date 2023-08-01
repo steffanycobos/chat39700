@@ -14,8 +14,11 @@ export async function addProductsService(title, description, price, thumbnail, c
 
 export async function getProductByIdService(id){
     let product= await manager.getProductById(id)
+    if (product==undefined){
+        return console.log('Producto no existe')
+    }else{
     return product;
-}
+}}
 
 export async function updateProductService(id, title, description, price, thumbnail, code, stock){
     let product= await manager.updateProduct(id, title, description, price, thumbnail, code, stock)

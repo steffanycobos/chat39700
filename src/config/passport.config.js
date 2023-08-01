@@ -5,7 +5,7 @@ import { signupEmail, signupTwilio } from "../controllers/users.controller.js";
 import { createHash } from "../utils.js";
 import GithubStrategy from "passport-github2";
 import { isValidPassword } from "../utils.js";
-import path from 'path'
+
 
 export const initializedPassport = () => {
   ///LOGIN 
@@ -21,7 +21,7 @@ export const initializedPassport = () => {
           const { email, password } = req.body;
           const user = await UserModel.findOne({ email: email }).lean();
           
-          if (isValidPassword(password, user.password)) {
+      if (isValidPassword(password, user.password)) {
        user.last_connection= new Date();
        const userUpdated = await UserModel.findByIdAndUpdate(user._id,user);
             return done(null, userUpdated);
@@ -48,9 +48,10 @@ passport.use(
     },
     async (req, username, password, done) => {
       try {
-       let { first_name, last_name, age, avatar} = req.body;
-        //avatar=req.file;
-        (console.log(avatar))
+       let { first_name, last_name, age} = req.body;
+       let avatar
+       
+
         const user = await UserModel.findOne({ email: username });
         if (user) {
           req.logger.info('Usuario registrado anteriormente.')
@@ -68,12 +69,12 @@ passport.use(
           email: username,
           password: createHash(password),
           rol,
-          avatar:req.file.path
+          avatar: req.file.path || req.body.avatar
         };
         const userCreated = await UserModel.create(newUser);
         await signupEmail(newUser.email);
         // signupTwilio()
-        req.logger.info(newUser);
+        req.logger.info(JSON.stringify(newUser));
         return done(null, userCreated);
       } catch (error) {
         return done(error);

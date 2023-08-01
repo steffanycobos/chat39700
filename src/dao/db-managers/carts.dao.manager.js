@@ -2,8 +2,7 @@
 import cartsModel from "../models/carts.models.js";
 import ProductManager from "./products.dao.manager.js";
 import productsModel from "../models/products.models.js";
-import ticketsModel from "../models/tickets.models.js";
-import { v4 as uuidv4 } from "uuid";
+
 
 let manager = new ProductManager();
 class CartManagerDB {
@@ -21,7 +20,11 @@ class CartManagerDB {
 
   async checkCart(id) {
     const cart = await cartsModel.find({ _id: id });
-    return cart;
+    if (cart){
+      return cart;
+    }else{
+    return   console.log("No existe el carrito")
+  }
   }
 
   async addProductToCart(cartID, productID) {
@@ -69,48 +72,5 @@ class CartManagerDB {
     return cart;
   }
 
-  async ticketCart(cid) {
-    const cart = await cartsModel.find({ _id: cid });
-    if (cart) {
-      if (!cart[0].products.length) {
-        return "Necesita Ingresar productos al carrito antes de finalizar la compra";
-      }
-      let availableProducts = [];
-      let noProducts = [];
-      let i;
-      let prices = 0;
-
-      let cartProducts = cart[0].products.map((x) => {
-        return x.product;
-      }); // me da el id del producto para buscar
-      let cartqua = cart[0].products.map((x) => {
-        return x.quantity;
-      });
-
-      for (i = 0; i < cart[0].products.length; i++) {
-        let productoDB = await productsModel.findById(cartProducts[i]);
-
-        prices = productoDB.price + prices; //Obtener cantidad total
-        let stock = productoDB.stock;
-        if (stock >= cartqua[i]) {
-          availableProducts.push(cart[0].products[i]);
-        } else {
-          noProducts.push(cart[0].products);
-        }
-      }
-      console.log(prices);
-      let ticket = {
-        code: uuidv4(),
-        purchase_datetime: new Date(),
-        amount: prices,
-        purchaser: "cobos@gmail.com",
-      };
-      const ticketCreated = await ticketsModel.create(ticket);
-      return ticketCreated;
-    } else {
-      return console.log("el carrito no existe");
-    }
-  }
 }
-
 export default CartManagerDB;

@@ -25,7 +25,9 @@ export const logOutController = async (req, res) => {
 
 export const currentUserController = async (req, res) => {
   if (req.user) {
-    return res.send({ userInfo: req.user });
+    let infoUser= req.user
+    res.send({ userInfo: req.user });
+    return infoUser
   }
   res.send("Usuario No Logueado");
 };

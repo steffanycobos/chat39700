@@ -26,8 +26,12 @@ class ProductManagerDB {
 
   async getProductById(id) {
     const product = await productsModel.find({ _id: id });
+    if (product.length==0){
+      return console.log('No existe ese producto')
+    }else{
+ 
     return product;
-  }
+  }}
   async updateProduct(id, title, description, price, thumbnail, code, stock) {
     const filter = { _id: id };
     const update = { title, description, price, thumbnail, code, stock };

@@ -16,8 +16,12 @@ export async function addCartService(products){
 
 export async function checkCartService(id){
     let carts= await manager.checkCart(id)
-    return carts
-}
+    if (carts){
+        return carts
+
+    }  else {
+       return  console.log("El carrito no existe.")
+}}
 
 export async function addProductToCartService(cartId,productId,quantity){
    let cart= await manager.addProductToCart(cartId,productId,quantity)

@@ -7,7 +7,6 @@ class UserManager {
     let user = UserModel.findOne({
       email: email
     });
-    console.log(user, 'dao')
     return user
   }
   async findUSerbyId(id) {
@@ -104,10 +103,9 @@ class UserManager {
           ...user._doc,
           password:createHash(newPassword)
       }
-      console.log("userData",userData)
+     
       const userUpdate = await UserModel.findOneAndUpdate({email:email},userData);
-      
-          res.render("login",{message:"contraseña actualizada"});
+       res.render("login",{message:"contraseña actualizada"});
   } catch (error) {
   console.log(error);
   }

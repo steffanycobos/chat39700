@@ -38,21 +38,22 @@ export  const addProductsController= async(req,res)=>{
     newProduct.owner= req.user._id
     newProduct.save()
     res.json({status:"success", payload:newProduct})
-
-return newProduct
+    return newProduct
 }
 
 export const getProductByIdController= async(req,res)=>{
     let pid= req.params.pid
     let product= await getProductByIdService(pid)
-    res.json({status:"success", payload:product})
+    if( product== undefined){
+      res.send('No existe producto con ese id')
+    }else{
+    res.json({status:"success", payload:{product}})
 }
-
+}
 export const updateProductController= async(req,res)=>{
   try{
     const pid= req.params.pid
     const {title, description, price, thumbnail, code, stock}=req.body
-    console.log(pid)
     let product= await updateProductService(pid, title, description, price, thumbnail, code, stock)
     res.json({status:"success", payload:product})}
     catch(err){

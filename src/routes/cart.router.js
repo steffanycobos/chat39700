@@ -1,4 +1,3 @@
-
 import { Router, json } from "express";
 import __dirname from "../utils.js";
 import { getCartController, addCartController,checkCartController,addProductToCartController,deleteProductController,deleteProductsInCartController,updateQuantityController, ticketCartController } from "../controllers/carts.controller.js";
@@ -16,6 +15,7 @@ cartRouter.delete('/:cid/product/:pid', deleteProductController)
 cartRouter.delete('/:cid',deleteProductsInCartController)
 cartRouter.put('/:cid/product/:pid', updateQuantityController)
 cartRouter.get('/:cid/purchase',ticketCartController)
+
 
 
 
