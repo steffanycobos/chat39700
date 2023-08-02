@@ -39,7 +39,6 @@ export async function findUSerService(email) {
    } else{
     res.send( 'No se pudo realizar el cambio de rol, faltan documentos por cargar.')
    }
-  
  }
  
  export async function forgotPasswordService(req,res){

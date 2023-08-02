@@ -10,12 +10,11 @@ try {
     const products = await getProductsService();
 
     const { limit } = await req.query;
-
     if (limit) {
       products.length = limit;
       return res.send(products);
     } else {
-      res.send({ status: "ok", payload: products });
+      res.render("products", { products});
     }
   } catch (e) {
     res.status(404).send(`${e}`);
@@ -25,15 +24,13 @@ try {
 export  const addProductsController= async(req,res)=>{
  let { title, description, price, thumbnail, code, stock }= req.body
 
-    
    if( !title || !price ){
   CustomError.createError({
     name:'Error por usuario',
     cause:  generateUserErrorInfo(req.body),
     message: "Error creando nuevo producto.",
     errorCode:EError.INVALID_JSON
-  })
-    }
+  })}
     let newProduct= await addProductsService(title, description, price, thumbnail, code, stock)
     newProduct.owner= req.user._id
     newProduct.save()
@@ -53,8 +50,9 @@ export const getProductByIdController= async(req,res)=>{
 export const updateProductController= async(req,res)=>{
   try{
     const pid= req.params.pid
-    const {title, description, price, thumbnail, code, stock}=req.body
+    const {title, description, price, thumbnail, code, stock}=req.body   
     let product= await updateProductService(pid, title, description, price, thumbnail, code, stock)
+    product.save()
     res.json({status:"success", payload:product})}
     catch(err){
       res.send({status: 'error',payload:err})

@@ -15,7 +15,8 @@ price: {
    },
 thumbnail: {
      type: String,
-     required: true,
+     require:true,
+     default:""
    },
 code: {
      type: String,

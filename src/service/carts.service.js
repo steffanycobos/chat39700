@@ -18,7 +18,6 @@ export async function checkCartService(id){
     let carts= await manager.checkCart(id)
     if (carts){
         return carts
-
     }  else {
        return  console.log("El carrito no existe.")
 }}
