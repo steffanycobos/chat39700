@@ -22,7 +22,7 @@ authRouter.get('/failure-signup', (req,res)=>{
 /// LOGIN
 authRouter.post('/login', passport.authenticate('loginStrategy', {
     failureRedirect: '/api/auth/failure-login'}), (req, res) => {
-     res.redirect('/products')
+     res.redirect('/api/products')
     });
 
 ///FAILURE LOGIN
