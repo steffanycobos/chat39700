@@ -10,7 +10,8 @@ class CartManagerDB {
 
   getCart = async () => {
     let carts = await cartsModel.find();
-    return carts;
+    let carritos= JSON.parse(JSON.stringify(carts))
+    return carritos;
   };
 
   async addCart() {

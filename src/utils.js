@@ -96,7 +96,7 @@ export  const uploaderProfile= multer({storage:profileStorage, fileFilter: multe
     cb(null,path.join(__dirname,'multer/users/documents'))
   },
   filename: function(req,file,cb){
-    cb(null,`${req.body.email}--documentos-${file.originalname}`)
+    cb(null,`${req.user.email}--documentos-${file.originalname}`)
   }
 });
 export const uploaderDocuments= multer({storage:documentStorage})
@@ -108,7 +108,7 @@ const productStorage= multer.diskStorage({
     cb(null,path.join(__dirname,'multer/products'))
   },
   filename: function(req,file,cb){
-    cb(null,`${req.body.email}--productos-${file.originalname}`)
+    cb(null,`${req.user.email}--productos-${file.originalname}`)
   }
 });
 export const uploaderProducts= multer({storage:productStorage})

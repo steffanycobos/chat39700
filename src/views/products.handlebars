@@ -33,8 +33,12 @@
 <div>
 {{#each products}}
 <ul>
- <li>{{this}} <br> <br>
- </ul>
+ <li> Id: {{this._id}} <br> 
+Nombre:{{this.title}} <br>
+Descripción:{{this.description}} <br> 
+Precio: {{this.price}} <br>
+ </li>
+</ul>
 {{/each}}
 
 

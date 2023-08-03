@@ -5,8 +5,11 @@ class ProductManagerDB {
   constructor() {}
 
   async getProducts() {
-    const products = await productsModel.find();
-    return products;
+  let products = await productsModel.find();
+   let productos = JSON.parse(JSON.stringify(products));
+
+
+    return productos;
   }
 
   async addProducts(title, description, price, thumbnail, code, stock) {

@@ -16,7 +16,8 @@ price: {
 thumbnail: {
      type: String,
      require:true,
-     default:""
+     default:" "
+ 
    },
 code: {
      type: String,

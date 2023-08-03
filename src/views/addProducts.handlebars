@@ -9,7 +9,7 @@
 </head>
 <body>
     <h1>Agrega un Nuevo Producto:</h1>
-<form method="post" action="/api/products/add">
+<form method="post" action="/api/products/add" enctype="multipart/form-data">
   <div class="mb-3">
     <label for="exampleInputEmail1" class="form-label">Nombre</label>
     <input type="title" placeholder="Nombre" name="title" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" required>
@@ -24,7 +24,7 @@
   </div>
   <div class="mb-3">
     <label for="exampleInputEmail1" class="form-label">Imagen</label>
-    <input type="name" placeholder="Imagen" name="thumbnail" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" required>
+    <input type="file" placeholder="Imagen" name="thumbnail" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" required>
   </div>
   <div class="mb-3">
     <label for="exampleInputPassword1" class="form-label">Código</label>
