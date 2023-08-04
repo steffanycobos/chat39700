@@ -50,9 +50,7 @@ passport.use(
       try {
        let { first_name, last_name, age} = req.body;
        let avatar
-       
-
-        const user = await UserModel.findOne({ email: username });
+       const user = await UserModel.findOne({ email: username });
         if (user) {
           req.logger.info('Usuario registrado anteriormente.')
           return done(null, false);

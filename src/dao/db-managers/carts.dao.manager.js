@@ -38,7 +38,6 @@ class CartManagerDB {
     if (productExiste) {
       productExiste.quantity++;
       cart.save();
-      console.log(cart);
       return cart;
     } else {
       cart.products.push({ product: productID });
@@ -51,7 +50,6 @@ class CartManagerDB {
     console.log(cart);
     let productInCart = await manager.deleteProduct(productID);
     productInCart.save();
-    console.log(productID);
     return productInCart;
   }
 

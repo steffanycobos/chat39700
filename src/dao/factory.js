@@ -25,7 +25,4 @@ else if (persistence==='file'){
 else{
     throw new Error ('Persistencia desconocida.')
 }
-export{
-   CartManager,ProductManager
-
-}
+export{ CartManager, ProductManager }

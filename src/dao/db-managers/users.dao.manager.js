@@ -10,9 +10,7 @@ class UserManager {
     return user
   }
   async findUSerbyId(id) {
-    let user = UserModel.findOne({
-     _id:id
-    });
+    let user = UserModel.findOne({ _id:id});
     return user
   }
  
@@ -48,7 +46,6 @@ class UserManager {
   async changeRole(req,res){
     try{
       const userId = req.params.uid;
-      console.log(userId,'id')
           const user = await UserModel.findById(userId);
           const userRol = user.rol;
           if(userRol === "user"){
@@ -63,7 +60,6 @@ class UserManager {
        
     }
     catch(err){
-      console.log(err.message);
           res.json({status:"error", message:"Hubo un error al intentar cambiar el rol de usuario."})
     }
   }
@@ -90,7 +86,7 @@ class UserManager {
   
       const validEmail = verifyEmailToken(token);
       if(!validEmail){
-          return res.send(`El enlace ya no es valido, genere un nuevo enlace para recuperar la contraseña <a href="/forgot-password" >Recuperar contraseña</a>`)
+          return res.send(`El enlace ya no es valido. Genere un nuevo enlace para recuperar su contraseña. <a href="/forgot-password" >Recuperar contraseña</a>`)
       }
       const user = await UserModel.findOne({email:email});
       if(!user){
@@ -105,7 +101,7 @@ class UserManager {
       }
      
       const userUpdate = await UserModel.findOneAndUpdate({email:email},userData);
-       res.render("login",{message:"contraseña actualizada"});
+       res.render("login",{message:"Contraseña actualizada"});
   } catch (error) {
   console.log(error);
   }

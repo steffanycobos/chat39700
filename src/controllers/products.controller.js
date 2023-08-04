@@ -14,7 +14,7 @@ try {
       products.length = limit;
       return res.send(products);
     } else {
-      res.render("products", { products});
+      res.render("products", { products });
     }
   } catch (e) {
     res.status(404).send(`${e}`);

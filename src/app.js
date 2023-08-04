@@ -45,6 +45,8 @@ initializedPassport();
 app.use(cookieParser())
 app.use(passport.initialize());
 app.use(passport.session());
+
+
 let manager = new ChatManager();
 const io = new Server(httpServer);
   
@@ -65,6 +67,8 @@ app.use((req, res, next) => {
   req.io = io;
   next();
 });
+
+
 app.use(addLogger);
 app.use("/", viewsRouter);
 app.use('/api/users', usersRouter);

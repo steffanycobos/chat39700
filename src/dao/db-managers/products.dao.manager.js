@@ -7,8 +7,6 @@ class ProductManagerDB {
   async getProducts() {
   let products = await productsModel.find();
    let productos = JSON.parse(JSON.stringify(products));
-
-
     return productos;
   }
 
