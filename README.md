@@ -1,4 +1,4 @@
-# Hola! Este es mi proyecto para el curso de CoderHouse "BACKEND"
+# Hola! Este es un proyecto para la práctica de BACKEND
 
 ## Utilicé:
  JAVASCRIPT, HANDLEBARS
